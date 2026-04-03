@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="dark" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Zenith Finance - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#86d2e5",
+                        "primary-container": "#006778",
+                        "on-primary-container": "#97e3f6",
+                        "secondary": "#78dc77",
+                        "secondary-fixed": "#94f990",
+                        "tertiary": "#ffb870",
+                        "surface": "#101415",
+                        "surface-container": "#1c2021",
+                        "surface-container-low": "#181c1d",
+                        "surface-container-high": "#272b2c",
+                        "surface-container-highest": "#323537",
+                        "on-surface": "#e0e3e4",
+                        "on-surface-variant": "#bec8cb",
+                        "outline": "#899295",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "background": "#101415"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #86d2e5 0%, #006778 100%);
+        }
+        body {
+            background-color: #101415;
+            color: #e0e3e4;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body selection:bg-primary/30 antialiased">
+    <!-- Unified SideNavBar -->
+    <aside class="h-screen fixed left-0 top-0 w-72 flex flex-col bg-[#101415] font-['Plus_Jakarta_Sans'] antialiased tracking-tight shadow-[32px_0_32px_-4px_rgba(0,0,0,0.06)] z-50">
+        <div class="flex flex-col h-full p-6 space-y-2">
+            <!-- Brand -->
+            <div class="mb-10 px-4">
+                <h1 class="text-2xl font-bold tracking-tighter text-[#86d2e5]">Dompetku</h1>
+                <p class="text-xs text-outline font-medium tracking-widest uppercase mt-1">THE DIGITAL CURATOR</p>
+            </div>
+            <!-- Nav Items -->
+            <nav class="flex-1">
+                <a class="bg-[#006778]/20 text-[#86d2e5] font-semibold rounded-xl px-4 py-3 mb-2 flex items-center gap-3 active:scale-95 duration-200 ease-in-out" href="dashboard.html">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    <span>Ringkasan</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="transaksi.html">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span>Transaksi</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="anggaran.html">
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                    <span>Anggaran</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="tabungan.html">
+                    <span class="material-symbols-outlined">savings</span>
+                    <span>Tabungan</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="laporan.html">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <span>Laporan</span>
+                </a>
+            </nav>
+            <!-- CTA -->
+            <button class="editorial-gradient text-on-primary-container font-bold py-4 px-6 rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">add_circle</span>
+                <span>Tambah Transaksi</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Unified TopAppBar -->
+    <header class="fixed top-0 right-0 left-72 h-20 z-40 bg-[#101415]/60 backdrop-blur-2xl font-headline font-medium">
+        <div class="flex justify-between items-center px-10 h-full">
+            <h2 class="text-xl font-bold text-on-surface">Selamat Datang, Budi</h2>
+            <div class="flex items-center gap-6">
+                <div class="relative group cursor-pointer active:opacity-70 transition-all hover:bg-[#1c2021] rounded-full p-2">
+                    <span class="material-symbols-outlined text-[#86d2e5]">notifications</span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full border-2 border-surface"></span>
+                </div>
+                <div class="flex items-center gap-3 cursor-pointer group">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-on-surface">Budi Darmawan</p>
+                        <p class="text-[10px] text-outline uppercase tracking-wider">Premium Member</p>
+                    </div>
+                    <img alt="Portrait" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRcaMNmpc_N-D_FueS47wRKEtFXSktzaubZE61B_0G-2m8LhHKrhlUjOkAapZ-0ewveC0GgE7WFMrTzLlVTQre772Sry9r5Ksfg0knSuZ26NDVPLW4F3HZHa1Nc1ITxHM36gQN12d4ofe0HaMLSKNaJFNRPdmAsnBw8CBE-w1IgPdgVDA7whaD8p0Sojrm6jAgQ9ChUrQann7UB2cc1fwZt5J2MQz9LJhwwzlZM0rbDUIo1iuSkRNQD7TcvJ3LmnhSwmE7jmviRwtP"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-72 pt-28 px-10 pb-20 max-w-7xl">
+        <!-- Hero Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+            <div class="lg:col-span-8 editorial-gradient rounded-[2.5rem] p-10 flex flex-col justify-between min-h-[320px] shadow-2xl relative overflow-hidden group">
+                <div class="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700"></div>
+                <div>
+                    <h2 class="text-on-primary-container/80 text-xs font-bold tracking-widest uppercase mb-2">TOTAL SALDO TERKURASI</h2>
+                    <div class="flex items-baseline gap-3">
+                        <span class="text-on-primary-container text-2xl font-medium">Rp</span>
+                        <h3 class="text-on-primary-container text-6xl font-black tracking-tighter">48.250.000</h3>
+                    </div>
+                </div>
+                <div class="flex gap-6 mt-8">
+                    <div class="flex flex-col">
+                        <span class="text-on-primary-container/60 text-[10px] font-bold uppercase tracking-widest">NOMOR REKENING Terdaftar</span>
+                        <span class="text-on-primary-container font-mono text-lg font-bold">**** **** 8829</span>
+                    </div>
+                    <div class="flex flex-col ml-auto">
+                        <span class="text-on-primary-container/60 text-[10px] font-bold uppercase tracking-widest text-right">STATUS AKUN</span>
+                        <span class="bg-secondary/20 text-secondary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-secondary/20">
+                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span> 
+                            TERVERIFIKASI
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Bento -->
+            <div class="lg:col-span-4 flex flex-col gap-4">
+                <div class="flex-1 bg-surface-container-low rounded-3xl p-6 flex flex-col justify-center border-l-4 border-secondary shadow-sm hover:bg-surface-container transition-colors">
+                    <p class="text-outline text-[10px] font-bold uppercase tracking-widest mb-1">PEMASUKAN BULAN INI</p>
+                    <p class="text-secondary text-2xl font-black tracking-tight">+ Rp 12.400.000</p>
+                    <div class="flex items-center gap-2 mt-2 text-secondary/60 text-xs">
+                        <span class="material-symbols-outlined text-sm">trending_up</span>
+                        <span>8% dari bulan lalu</span>
+                    </div>
+                </div>
+                <div class="flex-1 bg-surface-container-low rounded-3xl p-6 flex flex-col justify-center border-l-4 border-error shadow-sm hover:bg-surface-container transition-colors">
+                    <p class="text-outline text-[10px] font-bold uppercase tracking-widest mb-1">PENGELUARAN BULAN INI</p>
+                    <p class="text-error text-2xl font-black tracking-tight">- Rp 5.230.000</p>
+                    <div class="flex items-center gap-2 mt-2 text-error/60 text-xs">
+                        <span class="material-symbols-outlined text-sm">trending_down</span>
+                        <span>2% lebih hemat</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Category Chart -->
+            <div class="lg:col-span-4 bg-surface-container-low rounded-3xl p-8 flex flex-col shadow-lg">
+                <div class="flex justify-between items-start mb-8">
+                    <h3 class="text-lg font-bold text-on-surface">Analisis Kategori</h3>
+                    <button class="text-primary material-symbols-outlined">more_horiz</button>
+                </div>
+                <div class="relative w-48 h-48 mx-auto mb-8 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90">
+                        <circle cx="96" cy="96" fill="transparent" r="80" stroke="#1c2021" stroke-width="12"></circle>
+                        <circle cx="96" cy="96" fill="transparent" r="80" stroke="#86d2e5" stroke-dasharray="502" stroke-dashoffset="150" stroke-linecap="round" stroke-width="12"></circle>
+                        <circle cx="96" cy="96" fill="transparent" r="80" stroke="#78dc77" stroke-dasharray="502" stroke-dashoffset="400" stroke-linecap="round" stroke-width="12"></circle>
+                        <circle cx="96" cy="96" fill="transparent" r="80" stroke="#ffb870" stroke-dasharray="502" stroke-dashoffset="460" stroke-linecap="round" stroke-width="12"></circle>
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span class="text-[10px] text-outline font-bold uppercase">Total</span>
+                        <span class="text-xl font-black">Rp 5.2jt</span>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between group cursor-pointer p-2 hover:bg-surface-container rounded-xl transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="w-3 h-3 rounded-full bg-primary"></span>
+                            <span class="text-sm font-medium">Makan & Minum</span>
+                        </div>
+                        <span class="text-sm font-bold text-on-surface">45%</span>
+                    </div>
+                    <div class="flex items-center justify-between group cursor-pointer p-2 hover:bg-surface-container rounded-xl transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="w-3 h-3 rounded-full bg-secondary"></span>
+                            <span class="text-sm font-medium">Transportasi</span>
+                        </div>
+                        <span class="text-sm font-bold text-on-surface">30%</span>
+                    </div>
+                    <div class="flex items-center justify-between group cursor-pointer p-2 hover:bg-surface-container rounded-xl transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="w-3 h-3 rounded-full bg-tertiary"></span>
+                            <span class="text-sm font-medium">Belanja</span>
+                        </div>
+                        <span class="text-sm font-bold text-on-surface">25%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="lg:col-span-8 bg-surface-container-low rounded-3xl p-8 flex flex-col shadow-lg">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-lg font-bold text-on-surface">Transaksi Terbaru</h3>
+                    <a href="transaksi.html" class="text-primary text-sm font-bold hover:underline">Lihat Semua</a>
+                </div>
+                <div class="space-y-1">
+                    <div class="flex items-center gap-4 p-4 hover:bg-surface-container-high rounded-2xl transition-all cursor-pointer group">
+                        <div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined">restaurant</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-on-surface">Nasi Padang Sederhana</h4>
+                            <p class="text-[10px] text-outline font-bold uppercase tracking-wider">HARI INI • MAKAN & MINUM</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-black text-error">- Rp 45.000</p>
+                            <span class="text-[10px] text-outline font-bold bg-surface-container-highest px-2 py-0.5 rounded uppercase">TUNAI</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 hover:bg-surface-container-high rounded-2xl transition-all cursor-pointer group">
+                        <div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined">payments</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-on-surface">Gaji Bulanan</h4>
+                            <p class="text-[10px] text-outline font-bold uppercase tracking-wider">KEMARIN • PEMASUKAN</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-black text-secondary">+ Rp 8.500.000</p>
+                            <span class="text-[10px] text-outline font-bold bg-surface-container-highest px-2 py-0.5 rounded uppercase">BANK TRANSFER</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 hover:bg-surface-container-high rounded-2xl transition-all cursor-pointer group">
+                        <div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined">directions_car</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-on-surface">Grab Car - Kantor</h4>
+                            <p class="text-[10px] text-outline font-bold uppercase tracking-wider">12 MEI • TRANSPORTASI</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-black text-error">- Rp 62.000</p>
+                            <span class="text-[10px] text-outline font-bold bg-surface-container-highest px-2 py-0.5 rounded uppercase">E-WALLET</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

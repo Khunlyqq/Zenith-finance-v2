@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="dark" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Zenith Finance - Tabungan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#86d2e5",
+                        "primary-container": "#006778",
+                        "on-primary-container": "#97e3f6",
+                        "secondary": "#78dc77",
+                        "tertiary": "#ffb870",
+                        "surface": "#101415",
+                        "surface-container": "#1c2021",
+                        "surface-container-low": "#181c1d",
+                        "surface-container-high": "#272b2c",
+                        "surface-container-highest": "#323537",
+                        "on-surface": "#e0e3e4",
+                        "outline": "#899295",
+                        "background": "#101415"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "4xl": "2.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #86d2e5 0%, #006778 100%);
+        }
+        body { background-color: #101415; color: #e0e3e4; }
+    </style>
+</head>
+<body class="bg-surface font-body selection:bg-primary/30 antialiased">
+    <!-- Unified SideNavBar -->
+    <aside class="h-screen fixed left-0 top-0 w-72 flex flex-col bg-[#101415] font-['Plus_Jakarta_Sans'] antialiased tracking-tight shadow-[32px_0_32px_-4px_rgba(0,0,0,0.06)] z-50">
+        <div class="flex flex-col h-full p-6 space-y-2">
+            <!-- Brand -->
+            <div class="mb-10 px-4">
+                <h1 class="text-2xl font-bold tracking-tighter text-[#86d2e5]">Dompetku</h1>
+                <p class="text-xs text-outline font-medium tracking-widest uppercase mt-1">THE DIGITAL CURATOR</p>
+            </div>
+            <!-- Nav Items -->
+            <nav class="flex-1">
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="dashboard.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span>Ringkasan</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="transaksi.html">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span>Transaksi</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="anggaran.html">
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                    <span>Anggaran</span>
+                </a>
+                <a class="bg-[#006778]/20 text-[#86d2e5] font-semibold rounded-xl px-4 py-3 mb-2 flex items-center gap-3 active:scale-95 duration-200 ease-in-out" href="tabungan.html">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">savings</span>
+                    <span>Tabungan</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="laporan.html">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <span>Laporan</span>
+                </a>
+            </nav>
+            <!-- CTA -->
+            <button class="editorial-gradient text-on-primary-container font-bold py-4 px-6 rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">add_circle</span>
+                <span>Tambah Transaksi</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Unified TopAppBar -->
+    <header class="fixed top-0 right-0 left-72 h-20 z-40 bg-[#101415]/60 backdrop-blur-2xl font-headline font-medium">
+        <div class="flex justify-between items-center px-10 h-full">
+            <h2 class="text-xl font-bold text-on-surface">Target Tabungan</h2>
+            <div class="flex items-center gap-6">
+                <button onclick="openSavingsModal()" class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-bold text-sm tracking-tight hover:scale-105 active:scale-95 transition-all">
+                    <span class="material-symbols-outlined text-sm mr-1">add_circle</span>
+                    TARGET BARU
+                </button>
+                <div class="flex items-center gap-3 cursor-pointer group border-l border-outline/20 pl-6">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-on-surface">Budi Darmawan</p>
+                        <p class="text-[10px] text-outline uppercase tracking-wider">Premium Member</p>
+                    </div>
+                    <img alt="Portrait" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRcaMNmpc_N-D_FueS47wRKEtFXSktzaubZE61B_0G-2m8LhHKrhlUjOkAapZ-0ewveC0GgE7WFMrTzLlVTQre772Sry9r5Ksfg0knSuZ26NDVPLW4F3HZHa1Nc1ITxHM36gQN12d4ofe0HaMLSKNaJFNRPdmAsnBw8CBE-w1IgPdgVDA7whaD8p0Sojrm6jAgQ9ChUrQann7UB2cc1fwZt5J2MQz9LJhwwzlZM0rbDUIo1iuSkRNQD7TcvJ3LmnhSwmE7jmviRwtP"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-72 pt-28 px-10 pb-20 max-w-7xl">
+        <section class="grid grid-cols-12 gap-6 mb-12">
+            <!-- Hero Balance -->
+            <div class="col-span-12 lg:col-span-7 editorial-gradient p-10 rounded-4xl flex flex-col justify-between min-h-[300px] shadow-2xl relative overflow-hidden group">
+                <div class="absolute -right-10 -top-10 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 text-on-primary-container/80 mb-2 uppercase tracking-widest text-xs font-bold">
+                        <span class="material-symbols-outlined text-lg">account_balance_wallet</span>
+                        <span>TOTAL SALDO TABUNGAN</span>
+                    </div>
+                    <h3 class="text-6xl font-black text-on-primary-container tracking-tighter -ml-1">Rp 48.250.000</h3>
+                </div>
+                <div class="relative z-10 flex items-end justify-between">
+                    <div class="flex gap-8">
+                        <div>
+                            <p class="text-[10px] text-on-primary-container/60 font-black uppercase tracking-widest mb-1">Target Terkumpul</p>
+                            <p class="text-xl font-bold text-on-primary-container">32% <span class="text-xs font-normal opacity-70">dari Rp 150jt</span></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-on-primary-container/60 font-black uppercase tracking-widest mb-1">Pencapaian Bulan Ini</p>
+                            <p class="text-xl font-bold text-on-primary-container">+Rp 4.200.000</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grow Side Bento -->
+            <div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+                <div class="bg-surface-container-low p-6 rounded-3xl flex items-start gap-5 border border-outline/10 hover:bg-surface-container transition-all">
+                    <div class="w-14 h-14 bg-secondary/15 flex items-center justify-center rounded-2xl shrink-0 border border-secondary/10">
+                        <span class="material-symbols-outlined text-secondary">auto_awesome</span>
+                    </div>
+                    <div>
+                        <h4 class="font-headline font-bold mb-1">Wawasan Tabungan</h4>
+                        <p class="text-sm text-on-surface-variant leading-relaxed tracking-tight font-medium">Luar biasa! Kamu sudah mencapai <span class="text-secondary font-bold underline">60%</span> dari target <span class="text-on-surface font-bold">Liburan Jepang</span>. Sisa Rp 8jt lagi!</p>
+                    </div>
+                </div>
+                <div class="bg-surface-container-low p-6 rounded-3xl flex-1 flex flex-col justify-between border border-outline/10 relative overflow-hidden group">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-headline font-bold text-on-surface mb-0.5">Pertumbuhan Bulanan</h4>
+                            <p class="text-[10px] text-outline font-bold tracking-widest uppercase">6 BULAN TERAKHIR</p>
+                        </div>
+                        <span class="material-symbols-outlined text-primary">bar_chart</span>
+                    </div>
+                    <div class="flex items-end justify-between h-20 gap-2 mt-4 px-2">
+                        <div class="flex-1 bg-primary/10 rounded-t-lg h-[40%] hover:bg-primary/30 transition-all cursor-pointer"></div>
+                        <div class="flex-1 bg-primary/10 rounded-t-lg h-[55%] hover:bg-primary/30 transition-all cursor-pointer"></div>
+                        <div class="flex-1 bg-primary/10 rounded-t-lg h-[45%] hover:bg-primary/30 transition-all cursor-pointer"></div>
+                        <div class="flex-1 bg-primary/10 rounded-t-lg h-[75%] hover:bg-primary/30 transition-all cursor-pointer"></div>
+                        <div class="flex-1 bg-primary/10 rounded-t-lg h-[65%] hover:bg-primary/30 transition-all cursor-pointer"></div>
+                        <div class="flex-1 bg-primary rounded-t-lg h-[95%] shadow-[0_-8px_16px_rgba(134,210,229,0.2)]"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goals Grid -->
+        <section>
+            <div class="flex items-baseline justify-between mb-8">
+                <h3 class="text-3xl font-black font-headline tracking-tighter">Target Strategis</h3>
+                <a href="#" class="text-primary text-xs font-bold uppercase tracking-widest hover:underline">LIHAT SEMUA</a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <!-- Goal Card -->
+                <div class="bg-surface-container-low p-8 rounded-[2.5rem] flex flex-col group hover:bg-surface-container-high transition-all border border-outline/5 relative">
+                    <div class="absolute top-8 right-8 text-outline/20 group-hover:scale-110 group-hover:text-tertiary transition-all">
+                        <span class="material-symbols-outlined text-4xl">emergency</span>
+                    </div>
+                    <div class="mb-8">
+                        <span class="bg-tertiary/15 text-tertiary text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-tertiary/20">PRIORITAS TINGGI</span>
+                        <h4 class="text-2xl font-black font-headline mt-4 mb-2">Dana Darurat</h4>
+                        <div class="flex items-center gap-2 text-outline text-[10px] font-bold tracking-widest uppercase">
+                            <span class="material-symbols-outlined text-sm">event</span>
+                            ESTIMASI: DEC 2026
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-end mb-3">
+                            <div>
+                                <p class="text-[10px] text-outline font-bold uppercase tracking-widest mb-1">Terkumpul</p>
+                                <p class="text-lg font-bold text-on-surface">Rp 30.000.000</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] text-outline font-bold uppercase tracking-widest mb-1">Target</p>
+                                <p class="text-sm font-medium text-on-surface-variant">Rp 50jt</p>
+                            </div>
+                        </div>
+                        <div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden mb-8 shadow-inner">
+                            <div class="h-full bg-tertiary rounded-full shadow-[0_0_12px_rgba(255,184,112,0.3)]" style="width: 60%"></div>
+                        </div>
+                        <button class="w-full py-4 bg-surface-container-highest hover:bg-primary hover:text-on-primary font-bold rounded-2xl transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px]">
+                            <span class="material-symbols-outlined text-sm">add</span>
+                            TAMBAH TABUNGAN
+                        </button>
+                    </div>
+                </div>
+                <!-- Case: Japan Trip -->
+                <div class="bg-surface-container-low p-8 rounded-[2.5rem] flex flex-col group hover:bg-surface-container-high transition-all border border-outline/5 relative">
+                    <div class="absolute top-8 right-8 text-outline/20 group-hover:scale-110 group-hover:text-secondary transition-all">
+                        <span class="material-symbols-outlined text-4xl">flight_takeoff</span>
+                    </div>
+                    <div class="mb-8">
+                        <span class="bg-secondary/15 text-secondary text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-secondary/20">GAYA HIDUP</span>
+                        <h4 class="text-2xl font-black font-headline mt-4 mb-2">Liburan Jepang</h4>
+                        <div class="flex items-center gap-2 text-outline text-[10px] font-bold tracking-widest uppercase">
+                            <span class="material-symbols-outlined text-sm">event</span>
+                            ESTIMASI: JUN 2026
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-end mb-3">
+                            <div>
+                                <p class="text-[10px] text-outline font-bold uppercase tracking-widest mb-1">Terkumpul</p>
+                                <p class="text-lg font-bold text-on-surface">Rp 12.000.000</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] text-outline font-bold uppercase tracking-widest mb-1">Target</p>
+                                <p class="text-sm font-medium text-on-surface-variant">Rp 20jt</p>
+                            </div>
+                        </div>
+                        <div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden mb-8">
+                            <div class="h-full bg-secondary rounded-full shadow-[0_0_12px_rgba(120,220,119,0.3)]" style="width: 60%"></div>
+                        </div>
+                        <button class="w-full py-4 bg-surface-container-highest hover:bg-primary hover:text-on-primary font-bold rounded-2xl transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px]">
+                            <span class="material-symbols-outlined text-sm">add</span>
+                            TAMBAH TABUNGAN
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Savings Modal (Static) -->
+    <div id="savingsModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div onclick="closeSavingsModal()" class="absolute inset-0 bg-[#0a0c0d]/80 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-xl bg-[#101415] border border-white/5 rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div class="bg-gradient-to-r from-[#181c1d] to-[#101415] p-8 border-b border-white/5 flex justify-between items-center">
+                <div>
+                    <h3 class="text-2xl font-black font-headline tracking-tighter">Target Tabungan Baru</h3>
+                    <p class="text-[10px] text-[#899295] font-black uppercase tracking-widest mt-1">PROTOTYPE MODE</p>
+                </div>
+                <button onclick="closeSavingsModal()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[#899295] hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-8 space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2">NAMA TARGET</label>
+                    <input type="text" placeholder="Misal: Liburan ke Jepang..." class="w-full bg-[#181c1d] border border-white/5 rounded-2xl px-6 py-4 text-lg font-bold outline-none focus:border-primary/30 transition-all"/>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2">TARGET NOMINAL</label>
+                        <div class="relative group">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-[#899295]">Rp</span>
+                            <input type="number" class="w-full bg-[#181c1d] border border-white/5 rounded-2xl pl-10 pr-4 py-4 text-base font-bold outline-none"/>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2">SALDO AWAL</label>
+                        <div class="relative group">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-[#899295]">Rp</span>
+                            <input type="number" class="w-full bg-[#181c1d] border border-white/5 rounded-2xl pl-10 pr-4 py-4 text-base font-bold outline-none"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2">TENGGAT WAKTU</label>
+                    <input type="date" class="w-full bg-[#181c1d] border border-white/5 rounded-2xl px-6 py-4 text-base font-bold outline-none"/>
+                </div>
+                <div class="pt-4 flex gap-4">
+                    <button onclick="closeSavingsModal()" class="flex-1 py-4 bg-white/5 text-[#899295] font-black text-xs uppercase tracking-widest rounded-2xl">BATALKAN</button>
+                    <button onclick="handleSaveSavings()" class="flex-[2] py-4 editorial-gradient text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-xl active:scale-95 transition-all">BUAT TARGET</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openSavingsModal() {
+            const modal = document.getElementById('savingsModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSavingsModal() {
+            const modal = document.getElementById('savingsModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+        function handleSaveSavings() {
+            alert('Target tabungan berhasil dibuat! (Demo Prototip)');
+            closeSavingsModal();
+        }
+    </script>
+</body>
+</html>

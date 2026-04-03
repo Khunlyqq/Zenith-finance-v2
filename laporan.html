@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="dark" lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Zenith Finance - Laporan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#86d2e5",
+                        "primary-container": "#006778",
+                        "on-primary-container": "#97e3f6",
+                        "secondary": "#78dc77",
+                        "tertiary": "#ffb870",
+                        "surface": "#101415",
+                        "surface-container": "#1c2021",
+                        "surface-container-low": "#181c1d",
+                        "surface-container-high": "#272b2c",
+                        "surface-container-highest": "#323537",
+                        "on-surface": "#e0e3e4",
+                        "outline": "#899295",
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #86d2e5 0%, #006778 100%);
+        }
+        body { background-color: #101415; color: #e0e3e4; }
+    </style>
+</head>
+<body class="bg-surface font-body selection:bg-primary/30 antialiased">
+    <!-- Unified SideNavBar -->
+    <aside class="h-screen fixed left-0 top-0 w-72 flex flex-col bg-[#101415] font-['Plus_Jakarta_Sans'] antialiased tracking-tight shadow-[32px_0_32px_-4px_rgba(0,0,0,0.06)] z-50">
+        <div class="flex flex-col h-full p-6 space-y-2">
+            <div class="mb-10 px-4">
+                <h1 class="text-2xl font-bold tracking-tighter text-[#86d2e5]">Dompetku</h1>
+                <p class="text-xs text-outline font-medium tracking-widest uppercase mt-1">THE DIGITAL CURATOR</p>
+            </div>
+            <nav class="flex-1">
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="dashboard.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span>Ringkasan</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="transaksi.html">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span>Transaksi</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="anggaran.html">
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                    <span>Anggaran</span>
+                </a>
+                <a class="text-on-surface-variant hover:text-[#86d2e5] px-4 py-3 mb-2 flex items-center gap-3 transition-colors hover:bg-[#1c2021] rounded-xl active:scale-95 duration-200 ease-in-out" href="tabungan.html">
+                    <span class="material-symbols-outlined">savings</span>
+                    <span>Tabungan</span>
+                </a>
+                <a class="bg-[#006778]/20 text-[#86d2e5] font-semibold rounded-xl px-4 py-3 mb-2 flex items-center gap-3 active:scale-95 duration-200 ease-in-out" href="laporan.html">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+                    <span>Laporan</span>
+                </a>
+            </nav>
+            <button class="editorial-gradient text-on-primary-container font-bold py-4 px-6 rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">add_circle</span>
+                <span>Tambah Transaksi</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Unified TopAppBar -->
+    <header class="fixed top-0 right-0 left-72 h-20 z-40 bg-[#101415]/60 backdrop-blur-2xl font-headline font-medium">
+        <div class="flex justify-between items-center px-10 h-full">
+            <h2 class="text-2xl font-black text-white tracking-tight">Analisis Keuangan</h2>
+            <div class="flex items-center gap-6">
+                <div class="relative">
+                    <select class="appearance-none bg-surface-container-low border border-outline/10 text-on-surface px-6 py-2.5 pr-12 rounded-xl text-xs font-bold tracking-widest uppercase focus:ring-0 cursor-pointer">
+                        <option selected>Mei 2024</option>
+                        <option>April 2024</option>
+                    </select>
+                    <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-outline text-sm">expand_more</span>
+                </div>
+                <button class="flex items-center gap-2 bg-surface-container-high hover:bg-surface-bright text-primary px-5 py-2.5 rounded-xl font-bold text-xs transition-all uppercase tracking-widest border border-outline/5 shadow-lg">
+                    <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+                    EXPORT PDF
+                </button>
+                <div class="flex items-center gap-3 cursor-pointer group border-l border-outline/20 pl-6">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-on-surface">Budi Darmawan</p>
+                        <p class="text-[10px] text-outline uppercase tracking-wider">Premium Member</p>
+                    </div>
+                    <img alt="Portrait" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRcaMNmpc_N-D_FueS47wRKEtFXSktzaubZE61B_0G-2m8LhHKrhlUjOkAapZ-0ewveC0GgE7WFMrTzLlVTQre772Sry9r5Ksfg0knSuZ26NDVPLW4F3HZHa1Nc1ITxHM36gQN12d4ofe0HaMLSKNaJFNRPdmAsnBw8CBE-w1IgPdgVDA7whaD8p0Sojrm6jAgQ9ChUrQann7UB2cc1fwZt5J2MQz9LJhwwzlZM0rbDUIo1iuSkRNQD7TcvJ3LmnhSwmE7jmviRwtP"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-72 pt-28 px-10 pb-20 max-w-7xl">
+        <!-- Key Metrics -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-surface-container-low p-8 rounded-3xl border-l-4 border-secondary/40 shadow-sm relative overflow-hidden group">
+                <div class="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-8xl text-secondary">trending_up</span>
+                </div>
+                <div class="relative z-10">
+                    <p class="text-outline text-[10px] font-bold uppercase tracking-widest mb-1">TOTAL PEMASUKAN</p>
+                    <div class="text-3xl font-black font-headline tracking-tighter">Rp 12.450.000</div>
+                    <div class="mt-3 flex items-center gap-1 text-[10px] font-black text-secondary uppercase bg-secondary/10 px-2 py-1 rounded w-fit">
+                        <span class="material-symbols-outlined text-xs">arrow_upward</span>
+                        8.4% VS BULAN LALU
+                    </div>
+                </div>
+            </div>
+            <div class="bg-surface-container-low p-8 rounded-3xl border-l-4 border-tertiary/40 shadow-sm relative overflow-hidden group">
+                <div class="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-8xl text-tertiary">trending_down</span>
+                </div>
+                <div class="relative z-10">
+                    <p class="text-outline text-[10px] font-bold uppercase tracking-widest mb-1">TOTAL PENGELUARAN</p>
+                    <div class="text-3xl font-black font-headline tracking-tighter">Rp 8.210.000</div>
+                    <div class="mt-3 flex items-center gap-1 text-[10px] font-black text-tertiary uppercase bg-tertiary/10 px-2 py-1 rounded w-fit">
+                        <span class="material-symbols-outlined text-xs">arrow_downward</span>
+                        2.1% VS BULAN LALU
+                    </div>
+                </div>
+            </div>
+            <div class="editorial-gradient p-8 rounded-3xl shadow-xl relative overflow-hidden group">
+                <div class="absolute -right-8 -bottom-8 opacity-20 group-hover:rotate-12 transition-transform">
+                    <span class="material-symbols-outlined text-9xl">savings</span>
+                </div>
+                <div class="relative z-10">
+                    <p class="text-on-primary-container/70 text-[10px] font-bold uppercase tracking-widest mb-1">TABUNGAN BERSIH</p>
+                    <div class="text-3xl font-black font-headline text-on-primary-container tracking-tighter">Rp 4.240.000</div>
+                    <p class="mt-4 text-[10px] font-black text-on-primary-container/60 uppercase tracking-widest">RASIO TABUNGAN: 34%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+            <div class="lg:col-span-8 bg-surface-container-low p-10 rounded-4xl border border-outline/5">
+                <div class="flex items-center justify-between mb-10">
+                    <h3 class="text-xl font-black font-headline tracking-tight">Pemasukan vs Pengeluaran</h3>
+                    <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(134,210,229,0.5)]"></span>
+                            <span class="text-[10px] font-black text-outline uppercase tracking-widest">Pemasukan</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_rgba(255,184,112,0.5)]"></span>
+                            <span class="text-[10px] font-black text-outline uppercase tracking-widest">Pengeluaran</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-64 flex items-end justify-between gap-6 px-4">
+                    <!-- Nov -->
+                    <div class="flex-1 flex flex-col items-center gap-3 group cursor-help">
+                        <div class="w-full flex justify-center items-end gap-1.5 h-full">
+                            <div class="w-3 bg-primary/20 h-[70%] rounded-t flex items-end hover:bg-primary transition-all"></div>
+                            <div class="w-3 bg-tertiary/20 h-[50%] rounded-t flex items-end hover:bg-tertiary transition-all"></div>
+                        </div>
+                        <span class="text-[10px] text-outline font-black uppercase tracking-widest">NOV</span>
+                    </div>
+                    <!-- Des -->
+                    <div class="flex-1 flex flex-col items-center gap-3 group cursor-help">
+                        <div class="w-full flex justify-center items-end gap-1.5 h-full">
+                            <div class="w-3 bg-primary/20 h-[85%] rounded-t flex items-end hover:bg-primary transition-all"></div>
+                            <div class="w-3 bg-tertiary/20 h-[60%] rounded-t flex items-end hover:bg-tertiary transition-all"></div>
+                        </div>
+                        <span class="text-[10px] text-outline font-black uppercase tracking-widest">DES</span>
+                    </div>
+                    <!-- Mei (Active) -->
+                    <div class="flex-1 flex flex-col items-center gap-3">
+                        <div class="w-full flex justify-center items-end gap-1.5 h-full">
+                            <div class="w-4 bg-primary h-full rounded-t shadow-[0_-8px_20px_rgba(134,210,229,0.3)]"></div>
+                            <div class="w-4 bg-tertiary h-[65%] rounded-t shadow-[0_-8px_20px_rgba(255,184,112,0.3)]"></div>
+                        </div>
+                        <span class="text-[10px] text-primary font-black uppercase tracking-widest">MEI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Summary Card -->
+            <div class="lg:col-span-4 bg-primary-container p-10 rounded-4xl flex flex-col justify-between relative overflow-hidden shadow-2xl">
+                <div class="absolute top-0 right-0 p-6 opacity-20">
+                    <span class="material-symbols-outlined text-8xl text-on-primary-container">psychology</span>
+                </div>
+                <div class="relative z-10">
+                    <span class="bg-white/10 text-on-primary-container text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-8 inline-block backdrop-blur-md border border-white/10">Wawasan Pintar AI</span>
+                    <p class="text-xl font-headline font-medium leading-relaxed text-white tracking-tight">
+                        "Anda menghemat <span class="text-secondary font-black underline decoration-2 underline-offset-4">15% lebih banyak</span> untuk hiburan bulan ini. Terus konsisten untuk target <span class="text-primary font-black">Liburan Jepang</span> Anda!"
+                    </p>
+                </div>
+                <div class="mt-12 pt-10 border-t border-white/10 flex items-center justify-between">
+                    <div class="text-[10px] font-black text-on-primary-container/60 uppercase tracking-widest">Skor Kesehatan Finansial</div>
+                    <div class="text-4xl font-black text-white tracking-tighter">84<span class="text-lg opacity-50">/100</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Spending Analysis -->
+            <div class="bg-surface-container-low p-10 rounded-4xl border border-outline/5 shadow-lg">
+                <h3 class="text-xl font-black font-headline tracking-tight mb-10">Analisis Pengeluaran Detail</h3>
+                <div class="space-y-10">
+                    <!-- Food -->
+                    <div class="group cursor-pointer">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-primary shadow-inner group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined">restaurant</span>
+                                </div>
+                                <span class="font-bold tracking-tight">Makanan & Minuman</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-black text-lg">Rp 3.100.000</div>
+                                <div class="text-[10px] text-outline font-bold uppercase tracking-widest">38% DARI TOTAL</div>
+                            </div>
+                        </div>
+                        <div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden shadow-inner">
+                            <div class="h-full bg-primary transition-all duration-1000 shadow-[0_0_12px_rgba(134,210,229,0.4)]" style="width: 38%"></div>
+                        </div>
+                    </div>
+                    <!-- Transport -->
+                    <div class="group cursor-pointer">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-secondary shadow-inner group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined">commute</span>
+                                </div>
+                                <span class="font-bold tracking-tight">Transportasi</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-black text-lg">Rp 1.450.000</div>
+                                <div class="text-[10px] text-outline font-bold uppercase tracking-widest">18% DARI TOTAL</div>
+                            </div>
+                        </div>
+                        <div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden shadow-inner">
+                            <div class="h-full bg-secondary transition-all duration-1000 shadow-[0_0_12px_rgba(120,220,119,0.4)]" style="width: 18%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Net Worth Trend -->
+            <div class="bg-surface-container-low p-10 rounded-4xl border border-outline/5 relative overflow-hidden group shadow-lg">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xl font-black font-headline tracking-tight">Pertumbuhan Kekayaan</h3>
+                    <div class="text-[10px] font-black text-secondary bg-secondary/10 px-3 py-1 rounded-full uppercase tracking-widest border border-secondary/10">+ Rp 12.4jt THN INI</div>
+                </div>
+                <div class="text-5xl font-black font-headline tracking-tighter mb-10 -ml-1">Rp 142.000.000</div>
+                <div class="relative h-48 w-full border-b border-l border-white/5 px-2">
+                    <svg class="w-full h-full drop-shadow-[0_12px_24px_rgba(134,210,229,0.2)]" viewBox="0 0 400 150">
+                        <path d="M0,150 L0,110 C50,115 80,95 120,100 C160,105 180,75 240,85 C300,95 350,55 400,60 L400,150 Z" fill="url(#gradientFill)" opacity="0.15"></path>
+                        <path d="M0,110 C50,115 80,95 120,100 C160,105 180,75 240,85 C300,95 350,55 400,60" fill="none" stroke="#86d2e5" stroke-linecap="round" stroke-width="4"></path>
+                        <defs>
+                            <linearGradient id="gradientFill" x1="0%" x2="0%" y1="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#86d2e5;stop-opacity:1"></stop>
+                                <stop offset="100%" style="stop-color:#101415;stop-opacity:0"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="flex justify-between mt-6 text-[10px] font-black text-outline uppercase tracking-[0.2em] px-2">
+                    <span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MEI</span>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
