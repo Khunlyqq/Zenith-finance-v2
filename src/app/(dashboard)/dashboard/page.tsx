@@ -58,9 +58,9 @@ async function HeroStats() {
   }
 
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <section className="flex lg:grid lg:grid-cols-12 gap-4 lg:gap-8 overflow-x-auto lg:overflow-visible snap-x snap-mandatory hide-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0">
       <div 
-        className="lg:col-span-6 bg-gradient-to-br from-[#86d2e5] to-[#006778] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 flex flex-col justify-between h-[240px] md:h-[280px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300"
+        className="min-w-[85vw] lg:min-w-0 lg:col-span-6 bg-gradient-to-br from-[#86d2e5] to-[#006778] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 flex flex-col justify-between h-[240px] md:h-[280px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 snap-center"
         style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
       >
         <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700"></div>
@@ -89,7 +89,7 @@ async function HeroStats() {
       </div>
 
       {/* Quick Stats Bento */}
-      <div className="lg:col-span-6 flex flex-col gap-4">
+      <div className="min-w-[70vw] lg:min-w-0 lg:col-span-6 flex flex-col gap-4 snap-center">
         <div 
           className="flex-1 bg-[#181c1d] rounded-3xl p-6 flex flex-col justify-center border-l-4 border-[#78dc77] shadow-sm hover:bg-[#1c2021] cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group premium-glow"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
@@ -107,7 +107,7 @@ async function HeroStats() {
           </div>
         </div>
         <div 
-          className="flex-1 bg-[#181c1d] rounded-3xl p-6 flex flex-col justify-center border-l-4 border-[#ffb4ab] shadow-sm hover:bg-[#1c2021] cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group premium-glow"
+          className="flex-1 bg-[#181c1d] rounded-3xl p-6 flex flex-col justify-center border-l-4 border-[#ffb4ab] shadow-sm hover:bg-[#1c2021] cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group premium-glow h-[112px] md:h-auto"
           style={{ '--card-glow-rgb': '255, 180, 171' } as React.CSSProperties}
         >
           <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">

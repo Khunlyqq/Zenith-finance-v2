@@ -1,8 +1,6 @@
-import Sidebar from "@/components/shared/Sidebar";
 import Header from "@/components/shared/Header";
 import BottomNav from "@/components/shared/BottomNav";
 import MobileFab from "@/components/shared/MobileFab";
-import PageTransition from "@/components/shared/PageTransition";
 import TransactionModal from "@/components/shared/TransactionModal";
 import WalletModal from "@/components/modals/WalletModal";
 import BudgetModal from "@/components/modals/BudgetModal";
@@ -10,6 +8,7 @@ import SavingsModal from "@/components/modals/SavingsModal";
 import { getCachedUser, getCachedProfile } from "@/lib/supabase/user";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Sidebar from "@/components/shared/Sidebar";
 
 export default async function DashboardLayout({
   children,
@@ -49,9 +48,7 @@ export default async function DashboardLayout({
         <BudgetModal />
         <SavingsModal />
         <main className="flex-1 pt-24 px-10 pb-28 md:pb-8 max-w-7xl w-full mx-auto relative z-10">
-          <PageTransition>
-            {children}
-          </PageTransition>
+          {children}
         </main>
         <BottomNav />
         <MobileFab />

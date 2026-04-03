@@ -53,10 +53,10 @@ export default async function SavingsPage() {
 
   return (
     <div className="space-y-12 pb-12">
-      <section className="grid grid-cols-12 gap-6 mb-0 shrink-0">
+      <section className="flex lg:grid lg:grid-cols-12 gap-4 lg:gap-6 mb-0 shrink-0 overflow-x-auto lg:overflow-visible snap-x snap-mandatory hide-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0">
         {/* Hero Balance */}
         <div 
-          className="col-span-12 lg:col-span-7 bg-gradient-to-br from-[#86d2e5] to-[#006778] p-10 rounded-4xl flex flex-col justify-between min-h-[320px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse"
+          className="min-w-[85vw] lg:min-w-0 lg:col-span-7 snap-center bg-gradient-to-br from-[#86d2e5] to-[#006778] p-10 rounded-4xl flex flex-col justify-between min-h-[320px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse"
           style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
         >
           <div className="absolute -right-10 -top-10 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
@@ -86,7 +86,7 @@ export default async function SavingsPage() {
         </div>
 
         {/* Growth Bento */}
-        <div className="col-span-12 lg:col-span-5 flex flex-col gap-6">
+        <div className="min-w-[85vw] lg:min-w-0 lg:col-span-5 snap-center flex flex-col gap-6">
           <div 
             className="bg-[#181c1d] p-6 rounded-3xl flex items-start gap-5 border border-[#899295]/10 hover:bg-[#1c2021] transition-all premium-glow"
             style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
@@ -129,13 +129,13 @@ export default async function SavingsPage() {
           <button className="text-[#86d2e5] text-xs font-bold uppercase tracking-widest hover:underline">TAMBAH TARGET</button>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-4">
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 pb-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
           {goals.map((goal) => {
             const progress = Math.round((Number(goal.current_amount) / Number(goal.target_amount)) * 100);
             return (
               <div 
                 key={goal.id}
-                className="bg-[#181c1d] p-8 rounded-4xl flex flex-col group hover:bg-[#272b2c] transition-all border border-[#899295]/5 relative overflow-hidden premium-glow"
+                className="min-w-[80vw] md:min-w-0 snap-center bg-[#181c1d] p-8 rounded-4xl flex flex-col group hover:bg-[#272b2c] transition-all border border-[#899295]/5 relative overflow-hidden premium-glow"
                 style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
               >
                 <div className="absolute top-8 right-8 text-[#899295]/10 group-hover:scale-110 group-hover:text-[#86d2e5] transition-all">

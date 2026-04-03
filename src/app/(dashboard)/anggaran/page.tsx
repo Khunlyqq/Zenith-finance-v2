@@ -70,9 +70,9 @@ export default async function BudgetPage() {
   return (
     <div className="space-y-12 pb-12">
       {/* Overview Cards */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
         <div 
-          className="bg-gradient-to-br from-[#86d2e5] to-[#006778] p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group premium-glow"
+          className="min-w-[85vw] md:min-w-0 snap-center bg-gradient-to-br from-[#86d2e5] to-[#006778] p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group premium-glow h-[180px] md:h-auto flex flex-col justify-center md:justify-start"
           style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
         >
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
@@ -88,12 +88,12 @@ export default async function BudgetPage() {
         </div>
 
         <div 
-          className="bg-[#181c1d] p-8 rounded-[2.5rem] border border-[#899295]/10 hover:bg-[#1c2021] transition-all premium-glow"
+          className="min-w-[70vw] md:min-w-0 snap-center bg-[#181c1d] p-8 rounded-[2.5rem] border border-[#899295]/10 hover:bg-[#1c2021] transition-all premium-glow h-[180px] md:h-auto flex flex-col justify-center md:justify-start"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
-          <div className="flex justify-between items-start mb-6">
+          <div className="flex justify-between items-start mb-6 md:mb-6">
             <div className="p-3 bg-[#78dc77]/10 rounded-xl text-[#78dc77]">
-              <span className="material-symbols-outlined">payments</span>
+              <span className="material-symbols-outlined font-icon text-xl">payments</span>
             </div>
             <span className={`text-[10px] font-black tracking-widest px-3 py-1 rounded-full border ${totalSpent > totalBudget ? 'text-red-400 bg-red-400/10 border-red-400/20' : 'text-[#78dc77] bg-[#78dc77]/10 border-[#78dc77]/20'}`}>
               {totalSpent > totalBudget ? 'OVER BUDGET' : 'DALAM BATAS'}
@@ -109,12 +109,12 @@ export default async function BudgetPage() {
         </div>
 
         <div 
-          className="bg-[#181c1d] p-8 rounded-[2.5rem] border border-[#899295]/10 hover:bg-[#1c2021] transition-all premium-glow"
+          className="min-w-[70vw] md:min-w-0 snap-center bg-[#181c1d] p-8 rounded-[2.5rem] border border-[#899295]/10 hover:bg-[#1c2021] transition-all premium-glow h-[180px] md:h-auto flex flex-col justify-center md:justify-start"
           style={{ '--card-glow-rgb': '255, 184, 112' } as React.CSSProperties}
         >
-          <div className="flex justify-between items-start mb-6">
+          <div className="flex justify-between items-start mb-6 md:mb-6">
             <div className="p-3 bg-[#ffb870]/10 rounded-xl text-[#ffb870]">
-              <span className="material-symbols-outlined">account_balance</span>
+              <span className="material-symbols-outlined font-icon text-xl">account_balance</span>
             </div>
           </div>
           <p className="text-[#899295] text-xs font-bold uppercase tracking-widest mb-1">SISA ANGGARAN</p>
