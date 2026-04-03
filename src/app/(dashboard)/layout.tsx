@@ -2,6 +2,7 @@ import Sidebar from "@/components/shared/Sidebar";
 import Header from "@/components/shared/Header";
 import BottomNav from "@/components/shared/BottomNav";
 import MobileFab from "@/components/shared/MobileFab";
+import PageTransition from "@/components/shared/PageTransition";
 import TransactionModal from "@/components/shared/TransactionModal";
 import WalletModal from "@/components/modals/WalletModal";
 import BudgetModal from "@/components/modals/BudgetModal";
@@ -48,7 +49,9 @@ export default async function DashboardLayout({
         <BudgetModal />
         <SavingsModal />
         <main className="flex-1 pt-24 px-10 pb-28 md:pb-8 max-w-7xl w-full mx-auto relative z-10">
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </main>
         <BottomNav />
         <MobileFab />
