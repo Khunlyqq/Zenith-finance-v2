@@ -195,7 +195,10 @@ export default function LoginPage() {
 
       {/* Footer */}
       <footer className="w-full p-8 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-outline/50 gap-4">
-        <p>© 2024 Dompetku. Dikurasi untuk Kebebasan Finansial.</p>
+        <div className="flex items-center gap-2">
+          <p>© 2024 Dompetku. Dikurasi untuk Kebebasan Finansial.</p>
+          <span className="px-2 py-0.5 bg-white/5 rounded-full text-[9px] font-bold text-primary/40 border border-white/5">v2.1.0</span>
+        </div>
         <div className="flex gap-8">
           <Link href="#" className="hover:text-primary transition-colors">Kebijakan Privasi</Link>
           <Link href="#" className="hover:text-primary transition-colors">Syarat &amp; Ketentuan</Link>

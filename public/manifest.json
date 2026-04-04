@@ -1,7 +1,7 @@
 {
-  "name": "Zenith Keuangan Mapan",
+  "name": "Zenith Finance",
   "short_name": "Zenith",
-  "description": "Aplikasi pengelola keuangan dan pelaporan kekayaan kelas atas.",
+  "description": "Aplikasi Pengatur Keuangan Pribadi yang Terkurasi kelas premium.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#101415",

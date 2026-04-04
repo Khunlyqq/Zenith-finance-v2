@@ -69,5 +69,36 @@ export function OfflineSyncManager() {
     return () => window.removeEventListener('online', handleOnline);
   }, [router]);
 
+  // Force Cache Clear / Version Checking
+  useEffect(() => {
+    const CURRENT_VERSION = "2.1.0";
+    const storedVersion = localStorage.getItem("ZENITH_APP_VERSION");
+
+    if (storedVersion !== CURRENT_VERSION) {
+      const clearAndReload = async () => {
+        // Unregister all service workers
+        if ("serviceWorker" in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (const registration of registrations) {
+            await registration.unregister();
+          }
+        }
+
+        // Clear caches
+        if ("caches" in window) {
+          const cacheNames = await caches.keys();
+          for (const cacheName of cacheNames) {
+            await caches.delete(cacheName);
+          }
+        }
+
+        localStorage.setItem("ZENITH_APP_VERSION", CURRENT_VERSION);
+        window.location.reload();
+      };
+
+      clearAndReload();
+    }
+  }, []);
+
   return null;
 }

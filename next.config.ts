@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+// v2.1.0 - Triggering fresh production deployment
 import withPWAInit from "@ducanh2912/next-pwa";
 
 const withPWA = withPWAInit({
