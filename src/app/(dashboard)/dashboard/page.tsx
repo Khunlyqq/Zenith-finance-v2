@@ -58,71 +58,71 @@ async function HeroStats() {
   }
 
   return (
-    <section className="flex lg:grid lg:grid-cols-12 gap-4 lg:gap-8 overflow-x-auto lg:overflow-visible snap-x snap-mandatory hide-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0">
+    <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
       <div 
-        className="min-w-[85vw] lg:min-w-0 lg:col-span-6 bg-gradient-to-br from-[#86d2e5] to-[#006778] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 flex flex-col justify-between h-[240px] md:h-[280px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 snap-center"
+        className="lg:col-span-6 bg-gradient-to-br from-[#86d2e5] to-[#006778] rounded-3xl md:rounded-[2.5rem] p-6 md:p-10 flex flex-col justify-between min-h-[220px] md:min-h-[320px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse"
         style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
       >
-        <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700"></div>
-        <div>
-          <h2 className="text-white font-bold text-xs tracking-widest uppercase mb-2">TOTAL SALDO TERKURASI</h2>
-          <div className="flex items-baseline gap-3">
-            <span className="text-white text-2xl font-medium">Rp</span>
-            <h3 className="text-white text-4xl md:text-6xl font-black tracking-tighter">
+        <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+        <div className="relative z-10">
+          <h2 className="text-white font-black text-[9px] md:text-[10px] tracking-[0.2em] uppercase mb-3 opacity-80">TOTAL SALDO TERKURASI</h2>
+          <div className="flex items-baseline gap-2 md:gap-3">
+            <span className="text-white/80 text-xl font-medium">Rp</span>
+            <h3 className="text-white text-3xl md:text-6xl font-black tracking-tighter -ml-1">
               {new Intl.NumberFormat('id-ID').format(totalBalance)}
             </h3>
           </div>
         </div>
-        <div className="flex gap-6 mt-8">
+        <div className="relative z-10 flex justify-between items-end mt-8">
           <div className="flex flex-col">
-            <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest">DOMPET Terdaftar</span>
-            <h4 className="text-white font-mono text-lg font-bold">{wallets?.length || 0} Akun Aktif</h4>
+            <span className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-widest mb-1">DOMPET AKTIF</span>
+            <h4 className="text-white font-headline text-lg font-black">{wallets?.length || 0} Akun</h4>
           </div>
-          <div className="flex flex-col ml-auto">
-            <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest text-right">STATUS AKUN</span>
-            <span className="bg-[#78dc77]/20 text-[#78dc77] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-[#78dc77]/20">
-              <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span> 
-              TERVERIFIKASI
+          <div className="flex flex-col">
+            <span className="bg-[#78dc77]/20 text-[#78dc77] px-3 py-1 rounded-full text-[9px] font-black flex items-center gap-1 border border-[#78dc77]/20 backdrop-blur-md uppercase tracking-wider">
+              <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span> 
+              SINKRON
             </span>
           </div>
         </div>
       </div>
 
-      {/* Quick Stats Bento */}
-      <div className="min-w-[70vw] lg:min-w-0 lg:col-span-6 flex flex-col gap-4 snap-center">
+      {/* Quick Stats Bento — 2 cols on mobile */}
+      <div className="grid grid-cols-2 lg:grid-cols-1 lg:col-span-6 gap-3 md:gap-6">
         <div 
-          className="flex-1 bg-[#181c1d] rounded-3xl p-6 flex flex-col justify-center border-l-4 border-[#78dc77] shadow-sm hover:bg-[#1c2021] cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group premium-glow"
+          className="bg-[#181c1d] rounded-2xl md:rounded-3xl p-5 md:p-8 flex flex-col justify-center border-l-4 border-[#78dc77] shadow-sm hover:bg-[#1c2021] transition-all relative overflow-hidden group premium-glow"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
-          <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">
+          <div className="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 transition-transform hidden md:block">
               <TrendingUp size={96} className="text-[#78dc77]" />
           </div>
-          <p className="text-[#899295] text-[10px] font-bold uppercase tracking-widest mb-1 relative z-10">PEMASUKAN BULAN INI</p>
-          <p className="text-[#78dc77] text-2xl font-black tracking-tight relative z-10">
-            + Rp {new Intl.NumberFormat('id-ID').format(monthlyInflow)}
+          <p className="text-[#899295] text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1 relative z-10">PEMASUKAN</p>
+          <p className="text-[#78dc77] text-lg md:text-2xl font-black tracking-tight relative z-10 line-clamp-1">
+            + {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(monthlyInflow)}
           </p>
-          <div className="flex items-center gap-2 mt-2 text-[#78dc77]/60 text-xs relative z-10">
-            <TrendingUp size={14} />
-            <span>Terintegrasi Real-time</span>
+          <div className="flex items-center gap-1 mt-2 text-[#78dc77]/60 text-[9px] relative z-10 font-bold uppercase tracking-widest">
+            <TrendingUp size={10} />
+            <span>Live</span>
           </div>
         </div>
         <div 
-          className="flex-1 bg-[#181c1d] rounded-3xl p-6 flex flex-col justify-center border-l-4 border-[#ffb4ab] shadow-sm hover:bg-[#1c2021] cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 relative overflow-hidden group premium-glow h-[112px] md:h-auto"
+          className="bg-[#181c1d] rounded-2xl md:rounded-3xl p-5 md:p-8 flex flex-col justify-center border-l-4 border-[#ffb4ab] shadow-sm hover:bg-[#1c2021] transition-all relative overflow-hidden group premium-glow"
           style={{ '--card-glow-rgb': '255, 180, 171' } as React.CSSProperties}
         >
-          <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">
+          <div className="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 transition-transform hidden md:block">
               <TrendingDown size={96} className="text-[#ffb4ab]" />
           </div>
-          <p className="text-[#899295] text-[10px] font-bold uppercase tracking-widest mb-1 relative z-10">PENGELUARAN BULAN INI</p>
-          <p className="text-[#ffb4ab] text-2xl font-black tracking-tight relative z-10">
-            - Rp {new Intl.NumberFormat('id-ID').format(monthlyOutflow)}
+          <p className="text-[#899295] text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1 relative z-10">PENGELUARAN</p>
+          <p className="text-[#ffb4ab] text-lg md:text-2xl font-black tracking-tight relative z-10 line-clamp-1">
+            - {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(monthlyOutflow)}
           </p>
-          <div className="flex items-center gap-2 mt-2 text-[#ffb4ab]/60 text-xs relative z-10">
-            <TrendingDown size={14} />
-            <span>Terpantau Otomatis</span>
+          <div className="flex items-center gap-1 mt-2 text-[#ffb4ab]/60 text-[9px] relative z-10 font-bold uppercase tracking-widest">
+            <TrendingDown size={10} />
+            <span>Live</span>
           </div>
         </div>
       </div>
+
 
       {/* Premium AI Insights Segment */}
       <div 
@@ -306,36 +306,36 @@ async function MonthlyBudgetStats() {
 
   return (
     <section 
-      className="bg-[#181c1d] rounded-[2.5rem] p-8 shadow-lg border border-[#899295]/5 premium-glow shrink-0 cursor-pointer hover:scale-[1.005] active:scale-[0.995] transition-all duration-300"
+      className="bg-[#181c1d] rounded-2xl md:rounded-[2.5rem] p-6 md:p-8 shadow-lg border border-[#899295]/5 premium-glow shrink-0 transition-all font-headline"
       style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
     >
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4 md:gap-6">
         <div>
-          <h3 className="text-2xl font-bold font-headline tracking-tighter mb-1">Status Anggaran</h3>
-          <p className="text-xs text-[#899295] font-black uppercase tracking-[0.2em]">PEMANTAUAN {monthName}</p>
+          <h3 className="text-xl md:text-2xl font-black tracking-tighter mb-1">Status Anggaran</h3>
+          <p className="text-[9px] md:text-xs text-[#899295] font-black uppercase tracking-[0.2em]">PEMANTAUAN {monthName}</p>
         </div>
         <div className="flex gap-4">
-          <div className="text-right">
-            <p className="text-[10px] text-[#899295] font-black uppercase tracking-widest mb-1">TOTAL TERPAKAI</p>
-            <p className="text-xl font-black text-[#e0e3e4]">
+          <div className="text-left md:text-right">
+            <p className="text-[9px] md:text-[10px] text-[#899295] font-black uppercase tracking-widest mb-1 opacity-60">PENGGUNAAN AKTIF</p>
+            <p className="text-lg md:text-xl font-black text-[#e0e3e4]">
               Rp {new Intl.NumberFormat('id-ID').format(totalSpent)} 
-              <span className="text-xs font-normal opacity-50 ml-2">/ Rp {new Intl.NumberFormat('id-ID').format(mockBudget)}</span>
+              <span className="text-[10px] md:text-xs font-normal opacity-50 ml-2">/ Rp {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(mockBudget)}</span>
             </p>
           </div>
         </div>
       </div>
 
-      <div className="w-full h-3 bg-[#323537] rounded-full overflow-hidden shadow-inner relative">
+      <div className="w-full h-2 md:h-3 bg-[#323537] rounded-full overflow-hidden shadow-inner relative">
         <div 
-          className={`h-full transition-all duration-1000 ${percent > 90 ? 'bg-red-400 shadow-[0_0_12px_rgba(255,68,68,0.4)]' : 'bg-[#86d2e5] shadow-[0_0_12px_rgba(134,210,229,0.4)]'}`} 
+          className={`h-full transition-all duration-1000 ${percent > 90 ? 'bg-red-400 shadow-[0_0_12px_rgba(255,68,68,0.4)]' : 'bg-gradient-to-r from-[#86d2e5] to-[#006778] shadow-[0_0_12px_rgba(134,210,229,0.4)]'}`} 
           style={{ width: `${percent}%` }}
         ></div>
       </div>
       <div className="mt-4 flex justify-between items-center">
-        <p className="text-[10px] text-[#899295] font-bold uppercase tracking-widest">
-           {percent}% anggaran terpakai bulan ini
+        <p className="text-[8px] md:text-[10px] text-[#899295] font-black uppercase tracking-widest">
+           Eksekusi {percent}% Anggaran
         </p>
-        <Link href="/anggaran" className="text-[#86d2e5] text-[10px] font-black uppercase tracking-[0.2em] hover:underline">Detail Anggaran</Link>
+        <Link href="/anggaran" className="text-[#86d2e5] text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] hover:underline">Detail Analitik</Link>
       </div>
     </section>
   );
@@ -365,15 +365,17 @@ export default async function DashboardPage() {
         <MonthlyBudgetStats />
       </Suspense>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      {/* Main Grid — Responsive 2nd column grid on mobile, desktop 12-column */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-12">
         {/* Category Chart Section */}
-        <Suspense fallback={<SectionSkeleton />}>
-          <CategoryAnalysis />
-        </Suspense>
+        <div className="lg:col-span-6 h-full">
+          <Suspense fallback={<SectionSkeleton />}>
+            <CategoryAnalysis />
+          </Suspense>
+        </div>
 
         {/* Recent Transactions Section */}
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-6 h-full">
           <Suspense fallback={<SectionSkeleton />}>
             <RecentTransactions />
           </Suspense>
