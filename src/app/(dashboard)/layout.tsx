@@ -5,6 +5,7 @@ import TransactionModal from "@/components/shared/TransactionModal";
 import WalletModal from "@/components/modals/WalletModal";
 import BudgetModal from "@/components/modals/BudgetModal";
 import SavingsModal from "@/components/modals/SavingsModal";
+import AddFundModal from "@/components/modals/AddFundModal";
 import { getCachedUser, getCachedProfile } from "@/lib/supabase/user";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
@@ -47,6 +48,7 @@ export default async function DashboardLayout({
         <WalletModal />
         <BudgetModal />
         <SavingsModal />
+        <AddFundModal />
         <main className="flex-1 pt-24 px-10 pb-28 md:pb-8 max-w-7xl w-full mx-auto relative z-10">
           {children}
         </main>

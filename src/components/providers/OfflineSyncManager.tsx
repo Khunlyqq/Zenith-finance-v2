@@ -71,29 +71,44 @@ export function OfflineSyncManager() {
 
   // Force Cache Clear / Version Checking
   useEffect(() => {
-    const CURRENT_VERSION = "2.1.0";
+    const CURRENT_VERSION = "2.1.3";
     const storedVersion = localStorage.getItem("ZENITH_APP_VERSION");
 
     if (storedVersion !== CURRENT_VERSION) {
       const clearAndReload = async () => {
-        // Unregister all service workers
-        if ("serviceWorker" in navigator) {
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          for (const registration of registrations) {
-            await registration.unregister();
+        const loadingToast = toast.loading(`Memperbarui aplikasi ke ${CURRENT_VERSION}...`);
+        
+        try {
+          // Unregister all service workers
+          if ("serviceWorker" in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (const registration of registrations) {
+              await registration.unregister();
+            }
           }
-        }
 
-        // Clear caches
-        if ("caches" in window) {
-          const cacheNames = await caches.keys();
-          for (const cacheName of cacheNames) {
-            await caches.delete(cacheName);
+          // Clear all caches
+          if ("caches" in window) {
+            const cacheNames = await caches.keys();
+            for (const cacheName of cacheNames) {
+              await caches.delete(cacheName);
+            }
           }
-        }
 
-        localStorage.setItem("ZENITH_APP_VERSION", CURRENT_VERSION);
-        window.location.reload();
+          // Clear specific storage but keep critical auth/pending data if possible
+          // For now, a full refresh is safer for a hard bug fix
+          localStorage.setItem("ZENITH_APP_VERSION", CURRENT_VERSION);
+          
+          toast.success("Aplikasi diperbarui. Memuat ulang...", { id: loadingToast });
+          
+          // Delay briefly so the user can see the success toast
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } catch (error) {
+          console.error("Gagal membersihkan cache:", error);
+          window.location.reload();
+        }
       };
 
       clearAndReload();

@@ -81,3 +81,36 @@ export async function deleteSavingsGoal(id: string) {
   revalidatePath('/tabungan')
   return { success: true }
 }
+
+export async function addFundToGoal(id: string, amount: number) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) return { error: "Unauthorized" }
+
+  if (amount <= 0) return { error: "Nominal harus lebih dari 0" }
+
+  // Get current amount
+  const { data: goal, error: fetchError } = await supabase
+    .from('savings_goals')
+    .select('current_amount')
+    .eq('id', id)
+    .eq('user_id', user.id)
+    .single()
+
+  if (fetchError || !goal) return { error: "Target tidak ditemukan" }
+
+  const newAmount = Number(goal.current_amount) + amount
+
+  const { error: updateError } = await supabase
+    .from('savings_goals')
+    .update({ current_amount: newAmount })
+    .eq('id', id)
+    .eq('user_id', user.id)
+
+  if (updateError) return { error: updateError.message }
+
+  revalidatePath('/dashboard')
+  revalidatePath('/tabungan')
+  return { success: true }
+}

@@ -15,6 +15,10 @@ export interface ModalContextType {
   isSavingsModalOpen: boolean;
   openSavingsModal: () => void;
   closeSavingsModal: () => void;
+  isAddFundModalOpen: boolean;
+  openAddFundModal: (goalId: string, goalName: string) => void;
+  closeAddFundModal: () => void;
+  selectedGoal: { id: string; name: string } | null;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -24,6 +28,8 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [isWalletModalOpen, setWalletModalOpen] = useState(false);
   const [isBudgetModalOpen, setBudgetModalOpen] = useState(false);
   const [isSavingsModalOpen, setSavingsModalOpen] = useState(false);
+  const [isAddFundModalOpen, setAddFundModalOpen] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<{ id: string; name: string } | null>(null);
 
   const openTransactionModal = () => setTransactionModalOpen(true);
   const closeTransactionModal = () => setTransactionModalOpen(false);
@@ -33,6 +39,15 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const closeBudgetModal = () => setBudgetModalOpen(false);
   const openSavingsModal = () => setSavingsModalOpen(true);
   const closeSavingsModal = () => setSavingsModalOpen(false);
+
+  const openAddFundModal = (goalId: string, goalName: string) => {
+    setSelectedGoal({ id: goalId, name: goalName });
+    setAddFundModalOpen(true);
+  };
+  const closeAddFundModal = () => {
+    setAddFundModalOpen(false);
+    setSelectedGoal(null);
+  };
 
   return (
     <ModalContext.Provider 
@@ -48,7 +63,11 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
         closeBudgetModal,
         isSavingsModalOpen,
         openSavingsModal,
-        closeSavingsModal
+        closeSavingsModal,
+        isAddFundModalOpen,
+        openAddFundModal,
+        closeAddFundModal,
+        selectedGoal
       }}
     >
       {children}
