@@ -223,7 +223,7 @@ export default function SavingsClient({
 
       {/* Version Indicator */}
       <div className="flex justify-center opacity-20 hover:opacity-100 transition-opacity pb-8">
-        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#899295]">ZENITH.OS v2.1.3 — REVALIDATION READY</span>
+        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#899295]">ZENITH.OS v2.1.4 — REVALIDATION READY</span>
       </div>
     </div>
   );

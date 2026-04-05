@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-// v2.1.3 - Forcing sync on client side
+// v2.1.4 - Deployment alignment on master
 import withPWAInit from "@ducanh2912/next-pwa";
 
 const withPWA = withPWAInit({

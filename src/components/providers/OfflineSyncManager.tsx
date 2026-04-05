@@ -69,9 +69,9 @@ export function OfflineSyncManager() {
     return () => window.removeEventListener('online', handleOnline);
   }, [router]);
 
-  // Force Cache Clear / Version Checking
+  // v2.1.4 - Master branch sync deployment
   useEffect(() => {
-    const CURRENT_VERSION = "2.1.3";
+    const CURRENT_VERSION = "2.1.4";
     const storedVersion = localStorage.getItem("ZENITH_APP_VERSION");
 
     if (storedVersion !== CURRENT_VERSION) {
