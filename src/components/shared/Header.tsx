@@ -38,7 +38,15 @@ export default function Header({
   return (
     <header className="fixed top-0 right-0 md:left-72 left-0 h-20 z-40 bg-[#101415]/60 backdrop-blur-2xl font-headline font-medium border-b border-white/5 transition-all duration-300">
       <div className="flex justify-between items-center px-4 md:px-10 h-full">
-        <div className="flex-1"></div>
+        <div className="flex-1 md:hidden">
+          <Link href="/dashboard" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#86d2e5] to-[#006778] flex items-center justify-center shadow-lg shadow-[#86d2e5]/20">
+              <Sparkles size={16} className="text-white" />
+            </div>
+            <span className="text-sm font-black tracking-tighter text-white uppercase italic">Zenith</span>
+          </Link>
+        </div>
+        <div className="hidden md:flex flex-1"></div>
 
         <div className="flex items-center gap-6">
           {/* Notifications Trigger */}

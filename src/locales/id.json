@@ -1,5 +1,5 @@
 {
-  "sidebar": {
+  "nav": {
     "dashboard": "Dashboard",
     "transactions": "Transaksi",
     "budgets": "Anggaran",
