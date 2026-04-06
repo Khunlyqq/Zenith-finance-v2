@@ -10,6 +10,7 @@ import { getCachedUser, getCachedProfile } from "@/lib/supabase/user";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Sidebar from "@/components/shared/Sidebar";
+import PageTransition from "@/components/shared/PageTransition";
 
 export default async function DashboardLayout({
   children,
@@ -23,15 +24,21 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  const supabase = await createClient();
+  let profile = null;
+  let notifications: any[] = [];
 
-  const [profileRes, transactionsRes] = await Promise.all([
-    supabase.from("profiles").select("*").eq("id", user.id).single(),
-    supabase.from("transactions").select("*, categories(*)").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3)
-  ]);
+  try {
+    const supabase = await createClient();
+    const [profileRes, transactionsRes] = await Promise.all([
+      supabase.from("profiles").select("*").eq("id", user.id).single(),
+      supabase.from("transactions").select("*, categories(*)").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3)
+    ]);
 
-  const profile = profileRes.data;
-  const notifications = transactionsRes.data || [];
+    profile = profileRes.data;
+    notifications = transactionsRes.data || [];
+  } catch (error) {
+    console.error("DashboardLayout Data Fetch Error:", error);
+  }
 
   // Fallback to a default profile object if missing
   const safeProfile = profile || {
@@ -50,7 +57,9 @@ export default async function DashboardLayout({
         <SavingsModal />
         <AddFundModal />
         <main className="flex-1 pt-24 px-10 pb-28 md:pb-8 max-w-7xl w-full mx-auto relative z-10">
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </main>
         <BottomNav />
         <MobileFab />

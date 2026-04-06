@@ -3,7 +3,7 @@
 import { Bell, Sparkles, TrendingUp, TrendingDown, Wallet, Settings, User, LogOut, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
-import { useLanguage } from "@/components/providers/LanguageProvider"; // [NEW]
+import { useLanguage } from "@/components/providers/LanguageProvider"; 
 
 const logout = async () => { console.log("Logout triggered"); window.location.href = "/login"; };
 
@@ -16,7 +16,7 @@ export default function Header({
 }) {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const { t, lang } = useLanguage(); // [NEW]
+  const { t, lang } = useLanguage(); 
 
   async function handleLogout() {
     await logout();
@@ -27,7 +27,7 @@ export default function Header({
     const locale = lang === "id" ? "id-ID" : "en-US";
     return {
       id: notif.id,
-      title: notif.type === 'income' ? (lang === 'id' ? 'Pemasukan Baru' : 'New Income') : (lang === 'id' ? 'Pengeluaran Baru' : 'New Expense'),
+      title: notif.type === 'income' ? t("common.new_income") : t("common.new_expense"),
       desc: `${notif.note || (notif.categories?.name + (lang === "id" ? ' (Kategori)' : ' (Category)'))}: Rp ${new Intl.NumberFormat(locale).format(Math.abs(notif.amount))}`,
       time: new Date(notif.created_at).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
       icon: notif.type === 'income' ? <TrendingUp size={14} className="text-[#78dc77]" /> : <TrendingDown size={14} className="text-[#ffb4ab]" />,
@@ -70,7 +70,7 @@ export default function Header({
                 <div className="fixed inset-0 z-0" onClick={() => setIsNotifOpen(false)} />
                 <div className="absolute right-0 mt-4 w-80 bg-[#181c1d] border border-white/5 rounded-[2rem] shadow-2xl p-6 animate-in fade-in slide-in-from-top-2 duration-200 z-50 premium-glow">
                   <div className="flex items-center justify-between mb-6">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-[#899295]">{lang === "id" ? "Aktivitas Terbaru" : "Recent Activity"}</h4>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-[#899295]">{t("nav.recent_activity")}</h4>
                     <span className="bg-[#86d2e5]/10 text-[#86d2e5] text-[10px] font-black px-2 py-0.5 rounded-full uppercase">Live</span>
                   </div>
                   
@@ -92,7 +92,7 @@ export default function Header({
                   </div>
 
                   <button className="w-full mt-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#86d2e5] border border-[#86d2e5]/20 rounded-xl hover:bg-[#86d2e5]/10 transition-all">
-                    {lang === "id" ? "Lihat Semua Aktivitas" : "See All Activity"}
+                    {t("common.see_all_activity")}
                   </button>
                 </div>
               </>
@@ -114,7 +114,7 @@ export default function Header({
                 src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=150&auto=format&fit=crop"
               />
               <div className="text-right hidden sm:block">
-                <p className="text-xs font-black text-[#e0e3e4] line-clamp-1">{userProfile?.full_name || (lang === 'id' ? 'Pengguna' : 'User')}</p>
+                <p className="text-xs font-black text-[#e0e3e4] line-clamp-1">{userProfile?.full_name || t("common.user")}</p>
                 <div className="flex items-center gap-1.5 justify-end">
                    <p className="text-[9px] text-[#899295] uppercase tracking-widest font-black">
                     {userProfile?.is_premium ? t("common.premium") : t("common.standard")}

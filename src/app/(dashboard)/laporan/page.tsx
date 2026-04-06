@@ -15,9 +15,11 @@ import { createClient } from "@/lib/supabase/server";
 import { getCachedUser } from "@/lib/supabase/user";
 import { redirect } from "next/navigation";
 import EmptyState from "@/components/shared/EmptyState";
+import { getServerTranslation } from "@/lib/i18n/server";
 
 
 export default async function ReportsPage() {
+  const { t, lang } = await getServerTranslation();
   const user = await getCachedUser();
   const supabase = await createClient();
 
@@ -32,11 +34,13 @@ export default async function ReportsPage() {
     .eq("user_id", user.id)
     .order("date", { ascending: true });
 
-  const { data: profile } = await supabase.from('profiles').select('is_premium').eq('id', user.id).single();
   const isPremium = true; // Premium for All (v2.3.3)
+  const locale = lang === "id" ? "id-ID" : "en-US";
 
   const monthlyData: Record<string, { income: number; expense: number }> = {};
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+  const monthNames = lang === "id" 
+    ? ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
+    : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   
   (transactions || []).forEach(tx => {
     const d = new Date(tx.date);
@@ -81,7 +85,7 @@ export default async function ReportsPage() {
   let totalExpenseAllTime = 0;
   
   (transactions || []).filter(tx => tx.type === 'expense').forEach(tx => {
-    const catName = (tx.categories as any)?.name || 'Lainnya';
+    const catName = (tx.categories as any)?.name || (lang === "id" ? 'Lainnya' : 'Others');
     categoryLoss[catName] = (categoryLoss[catName] || 0) + Number(tx.amount);
     totalExpenseAllTime += Number(tx.amount);
   });
@@ -105,8 +109,8 @@ export default async function ReportsPage() {
                 <Search size={18} className={isPremium ? "text-[#101415]" : "text-[#899295]"} />
               </div>
               <div>
-                 <h2 className="text-lg md:text-xl font-black font-headline tracking-tight text-[#e0e3e4]">Deep Audit</h2>
-                 <p className="text-[8px] md:text-[10px] text-[#899295] font-black uppercase tracking-widest mt-0.5 md:mt-1">Diagnosis Laju Pemborosan</p>
+                 <h2 className="text-lg md:text-xl font-black font-headline tracking-tight text-[#e0e3e4]">{t("reports.audit_title")}</h2>
+                 <p className="text-[8px] md:text-[10px] text-[#899295] font-black uppercase tracking-widest mt-0.5 md:mt-1">{t("reports.audit_subtitle")}</p>
               </div>
             </div>
           </div>
@@ -116,9 +120,9 @@ export default async function ReportsPage() {
                <div className="relative overflow-hidden rounded-xl md:rounded-2xl p-6 md:p-8 bg-[#101415] border border-white/5 flex flex-col items-center justify-center min-h-[140px] md:min-h-[160px]">
                  <div className="absolute inset-0 bg-[#181c1d]/50 backdrop-blur-md z-10 flex flex-col items-center justify-center p-4 md:p-6 text-center">
                     <Lock size={24} className="text-[#86d2e5] mb-3" />
-                    <h3 className="text-white font-black tracking-tight mb-2 text-sm md:text-base">Anatomi Pengeluaran Terkunci</h3>
-                    <p className="text-[10px] text-[#899295] max-w-sm mb-4 leading-relaxed line-clamp-2 md:line-clamp-none">Upgrade ke Zenith Premium untuk melihat persentase kebocoran dompet secara otomatis.</p>
-                    <Link href="/profil" className="bg-[#86d2e5] text-[#101415] hover:bg-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl text-[9px] md:text-xs uppercase font-black tracking-widest transition-all">Upgrade Sekarang</Link>
+                    <h3 className="text-white font-black tracking-tight mb-2 text-sm md:text-base">{t("reports.locked_title")}</h3>
+                    <p className="text-[10px] text-[#899295] max-w-sm mb-4 leading-relaxed line-clamp-2 md:line-clamp-none">{t("reports.locked_desc")}</p>
+                    <Link href="/profil" className="bg-[#86d2e5] text-[#101415] hover:bg-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl text-[9px] md:text-xs uppercase font-black tracking-widest transition-all">{t("reports.upgrade_now")}</Link>
                  </div>
                  <div className="w-full flex justify-between opacity-10 filter blur-sm">
                    <div className="h-16 bg-white/10 rounded-xl w-[30%]"></div>
@@ -130,10 +134,10 @@ export default async function ReportsPage() {
                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
                  {topLosses.map((loss, idx) => (
                    <div key={loss.name} className="bg-[#101415] p-4 md:p-6 rounded-2xl md:rounded-[2rem] border border-white/5 relative overflow-hidden group/item hover:border-[#ffb870]/30 transition-colors">
-                     <span className="text-[7px] md:text-[10px] font-black text-[#899295] uppercase tracking-widest mb-2 block">Peringkat {idx + 1}</span>
+                     <span className="text-[7px] md:text-[10px] font-black text-[#899295] uppercase tracking-widest mb-2 block">{t("reports.rank")} {idx + 1}</span>
                      <h3 className="text-sm md:text-2xl font-black font-headline tracking-tighter text-[#e0e3e4] truncate mb-1">{loss.name}</h3>
                      <p className="text-[11px] md:text-xl font-bold text-[#ffb4ab] mb-3 md:mb-4">
-                        {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(loss.amount)}
+                        {new Intl.NumberFormat(locale).format(loss.amount)}
                      </p>
                      <div className="w-full bg-[#323537] h-1 md:h-2 rounded-full overflow-hidden">
                        <div className="h-full bg-gradient-to-r from-[#ffb4ab] to-[#ffb870] rounded-full" style={{ width: `${loss.perc}%` }}></div>
@@ -141,7 +145,7 @@ export default async function ReportsPage() {
                    </div>
                  ))}
                  {topLosses.length === 0 && (
-                   <div className="col-span-2 md:col-span-3 text-center py-8 text-[#899295] text-[10px] font-black uppercase">Data belum memadai</div>
+                   <div className="col-span-2 md:col-span-3 text-center py-8 text-[#899295] text-[10px] font-black uppercase">{t("reports.insufficient_data")}</div>
                  )}
                </div>
             )}
@@ -157,9 +161,9 @@ export default async function ReportsPage() {
           style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
         >
            <div className="relative z-10 text-white">
-              <p className="text-white/70 font-black text-[10px] uppercase tracking-[0.2em] mb-2">NET SAVINGS</p>
+              <p className="text-white/70 font-black text-[10px] uppercase tracking-[0.2em] mb-2">{t("reports.net_savings")}</p>
               <div className="text-2xl md:text-4xl font-black font-headline tracking-tighter leading-none mb-4">
-                Rp {new Intl.NumberFormat('id-ID').format(netSavings)}
+                Rp {new Intl.NumberFormat(locale).format(netSavings)}
               </div>
               <div className="flex items-center gap-3">
                  <div className="flex-1 h-1.5 bg-black/20 rounded-full overflow-hidden">
@@ -175,12 +179,12 @@ export default async function ReportsPage() {
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
           <div className="relative z-10">
-            <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">TOTAL INCOME</p>
+            <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">{t("reports.total_income")}</p>
             <div className="text-2xl md:text-3xl font-black font-headline tracking-tighter line-clamp-1 text-[#e0e3e4]">
-              {new Intl.NumberFormat('id-ID').format(currentIncome)}
+              {new Intl.NumberFormat(locale).format(currentIncome)}
             </div>
             <div className={`mt-3 flex items-center gap-1.5 text-[9px] font-black uppercase px-3 py-1 rounded-full w-fit border ${incomeChange >= 0 ? 'text-[#78dc77] bg-[#78dc77]/10 border-[#78dc77]/10' : 'text-[#ffb4ab] bg-[#ffb4ab]/10 border-[#ffb4ab]/10'}`}>
-              {Math.abs(incomeChange)}% VS LALU
+              {Math.abs(incomeChange)}% {t("reports.vs_last")}
             </div>
           </div>
         </div>
@@ -190,12 +194,12 @@ export default async function ReportsPage() {
           style={{ '--card-glow-rgb': '255, 184, 112' } as React.CSSProperties}
         >
            <div className="relative z-10">
-              <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">TOTAL EXPENSE</p>
+              <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">{t("reports.total_expense")}</p>
               <div className="text-2xl md:text-3xl font-black font-headline tracking-tighter line-clamp-1 text-[#ffb870]">
-                {new Intl.NumberFormat('id-ID').format(currentExpense)}
+                {new Intl.NumberFormat(locale).format(currentExpense)}
               </div>
               <div className={`mt-3 flex items-center gap-1.5 text-[9px] font-black uppercase px-3 py-1 rounded-full w-fit border ${expenseChange <= 0 ? 'text-[#78dc77] bg-[#78dc77]/10 border-[#78dc77]/10' : 'text-[#ffb4ab] bg-[#ffb4ab]/10 border-[#ffb4ab]/10'}`}>
-                 {Math.abs(expenseChange)}% VS LALU
+                 {Math.abs(expenseChange)}% {t("reports.vs_last")}
               </div>
            </div>
         </div>
@@ -204,8 +208,8 @@ export default async function ReportsPage() {
       {(!transactions || transactions.length === 0) ? (
         <div className="py-20">
           <EmptyState 
-            title="Laporan Belum Tersedia"
-            description="Belum ada data transaksi yang terkumpul."
+            title={t("reports.empty_title")}
+            description={t("reports.empty_desc")}
           />
         </div>
       ) : (
@@ -215,7 +219,7 @@ export default async function ReportsPage() {
             style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
           >
              <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                <h3 className="text-lg md:text-xl font-black font-headline tracking-tighter text-[#e0e3e4]">Tren Bulanan</h3>
+                <h3 className="text-lg md:text-xl font-black font-headline tracking-tighter text-[#e0e3e4]">{t("reports.monthly_trend")}</h3>
                 <div className="flex items-center gap-4">
                    <div className="flex items-center gap-1.5">
                       <span className="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-[#86d2e5]"></span>
@@ -239,23 +243,22 @@ export default async function ReportsPage() {
                 <BrainCircuit size={64} className="text-[#86d2e5]" />
              </div>
              <div className="relative z-10">
-                <span className="bg-[#86d2e5]/10 text-[#86d2e5] text-[8px] md:text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-6 inline-block border border-[#86d2e5]/10 backdrop-blur-md">Skor AI</span>
+                <span className="bg-[#86d2e5]/10 text-[#86d2e5] text-[8px] md:text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-6 inline-block border border-[#86d2e5]/10 backdrop-blur-md">{t("reports.ai_score")}</span>
                 <p className="text-sm md:text-xl font-headline font-medium leading-relaxed text-white tracking-tight">
                   {savingsRatio > 20 ? (
-                    <>"Anda menghemat <span className="text-[#78dc77] font-black underline decoration-2 underline-offset-4">{savingsRatio}%</span>. Performa sehat!"</>
+                    <>{t("reports.performance_healthy").split('{ratio}')[0]}<span className="text-[#78dc77] font-black underline decoration-2 underline-offset-4">{savingsRatio}%</span>{t("reports.performance_healthy").split('{ratio}')[1]}</>
                   ) : (
-                    <>"Pengeluaran mencapai <span className="text-[#ffb4ab] font-black underline decoration-2 underline-offset-4">{100 - savingsRatio}%</span>. Tinjau ulang anggaran Anda."</>
+                    <>{t("reports.performance_warning").split('{ratio}')[0]}<span className="text-[#ffb4ab] font-black underline decoration-2 underline-offset-4">{100 - savingsRatio}%</span>{t("reports.performance_warning").split('{ratio}')[1]}</>
                   )}
                 </p>
              </div>
              <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-                <div className="text-[8px] md:text-[10px] font-black text-[#899295] uppercase tracking-widest">Kesehatan</div>
+                <div className="text-[8px] md:text-[10px] font-black text-[#899295] uppercase tracking-widest">{t("reports.health")}</div>
                 <div className="text-2xl md:text-4xl font-black text-[#86d2e5] tracking-tighter">{savingsRatio + 50}<span className="text-xs md:text-lg opacity-50">/100</span></div>
              </div>
           </div>
         </div>
       )}
     </div>
-
   );
 }

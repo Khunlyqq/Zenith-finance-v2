@@ -45,13 +45,23 @@ export const extractReceiptData = async (file: File): Promise<ScanResult> => {
     const { data: { text } } = await worker.recognize(file);
     const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
-    // 1. Identify Vendor (First few lines that aren't purely numeric)
+    // 1. Identify Vendor (First few lines that aren't purely numeric/dates)
     let vendor = "Struk Belanja";
-    for (let i = 0; i < Math.min(lines.length, 5); i++) {
-      if (lines[i].length > 3 && !/^\d+$/.test(lines[i])) {
-        vendor = lines[i];
-        break;
-      }
+    const noiseWords = ['tgl', 'jam', 'no.', 'struk', 'kasir', 'telp', 'id', 'pajak', 'tax', 'bukti'];
+    
+    for (let i = 0; i < Math.min(lines.length, 6); i++) {
+      const line = lines[i].toLowerCase();
+      // Skip if line is too short, mostly numeric, or contains noise words at start
+      if (line.length < 3) continue;
+      if (/^\d+$/.test(line)) continue;
+      if (noiseWords.some(word => line.startsWith(word))) continue;
+      
+      // Clean the line and keep it as vendor
+      vendor = lines[i]
+        .replace(/[^\w\s&]/g, '') // Remove special chars but keep space and &
+        .trim();
+        
+      if (vendor.length > 0) break;
     }
 
     // 2. Identify Total Amount (Find largest currency-like number)

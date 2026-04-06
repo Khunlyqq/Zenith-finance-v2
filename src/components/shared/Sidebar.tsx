@@ -88,7 +88,7 @@ export default function Sidebar() {
                   .order("date", { ascending: false });
 
                 if (error) {
-                  toast.error(lang === "id" ? "Gagal mengunduh laporan" : "Failed to download report");
+                  toast.error(t("common.download_error"));
                   return;
                 }
 
@@ -100,16 +100,16 @@ export default function Sidebar() {
                 // Flatten data for CSV
                 const locale = lang === "id" ? "id-ID" : "en-US";
                 const flattenedData = data.map((tx: any) => ({
-                  [lang === "id" ? "Tanggal" : "Date"]: new Date(tx.date).toLocaleDateString(locale),
-                  [lang === "id" ? "Catatan" : "Note"]: tx.note || "",
-                  [lang === "id" ? "Kategori" : "Category"]: tx.categories?.name || "",
-                  [lang === "id" ? "Dompet" : "Wallet"]: tx.wallets?.name || "",
-                  [lang === "id" ? "Tipe" : "Type"]: tx.type === "income" ? (lang === "id" ? "Pemasukan" : "Income") : (lang === "id" ? "Pengeluaran" : "Expense"),
-                  [lang === "id" ? "Jumlah" : "Amount"]: tx.amount
+                  [t("common.date")]: new Date(tx.date).toLocaleDateString(locale),
+                  [t("common.note")]: tx.note || "",
+                  [t("common.category")]: tx.categories?.name || "",
+                  [t("common.wallet")]: tx.wallets?.name || "",
+                  [t("common.type")]: tx.type === "income" ? t("common.income") : t("common.expense"),
+                  [t("common.amount")]: tx.amount
                 }));
 
                 downloadCSV(flattenedData, `Zenith_Report_${new Date().toISOString().split('T')[0]}`);
-                toast.success(lang === "id" ? "Laporan berhasil diunduh" : "Report downloaded successfully");
+                toast.success(t("common.download_success"));
               } else if (pathname === "/anggaran") {
                 openBudgetModal();
               } else if (pathname === "/tabungan") {

@@ -11,6 +11,7 @@ import { X, Plus, Wallet, Tag, Calendar, PenLine, Sparkles, Camera, Loader2, Loc
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useLanguage } from "@/components/providers/LanguageProvider";
+import { useRouter } from "next/navigation";
 import { extractReceiptData } from "@/lib/utils/ocr";
 
 export default function TransactionModal() {
@@ -22,6 +23,7 @@ export default function TransactionModal() {
   const [error, setError] = useState<string | null>(null);
   const [isPremium, setIsPremium] = useState(true); // Premium for All (v2.3.3)
   const { t, lang } = useLanguage();
+  const router = useRouter();
 
   const supabase = createClient();
 
@@ -59,12 +61,14 @@ export default function TransactionModal() {
     if (catRes.data) setCategories(catRes.data);
     if (wallRes.data) {
       setWallets(wallRes.data);
-      // Auto-select if only one wallet exists
+      
+      const lastWalletId = localStorage.getItem("zenith_last_wallet_id");
+      
+      // Auto-select logic
       if (wallRes.data.length === 1) {
         setValue("wallet_id", wallRes.data[0].id);
-      } else if (wallRes.data.length > 0) {
-        // Fallback: Optional, can keep as is or leave empty
-        // setValue("wallet_id", wallRes.data[0].id);
+      } else if (lastWalletId && wallRes.data.some(w => w.id === lastWalletId)) {
+        setValue("wallet_id", lastWalletId);
       }
     }
     
@@ -99,8 +103,13 @@ export default function TransactionModal() {
       setValue("type", "expense");
       
       // Attempt to auto-select category if we have a match
-      if (result.category) {
-        const cat = categories.find(c => t(`nav.${c.name.toLowerCase()}`).toLowerCase().includes(result.category!.toLowerCase()) || c.name.toLowerCase().includes(result.category!.toLowerCase()));
+      if (result.category && categories.length > 0) {
+        const searchTerms = result.category.toLowerCase();
+        const cat = categories.find(c => {
+          const transName = t(`nav.${c.name.toLowerCase()}`).toLowerCase();
+          const origName = c.name.toLowerCase();
+          return transName.includes(searchTerms) || origName.includes(searchTerms);
+        });
         if (cat) setValue("category_id", cat.id);
       }
 
@@ -157,6 +166,12 @@ export default function TransactionModal() {
       setError(result.error);
       setLoading(false);
     } else {
+      // Save last used wallet
+      if (data.wallet_id) {
+        localStorage.setItem("zenith_last_wallet_id", data.wallet_id);
+      }
+      
+      router.refresh();
       reset();
       closeTransactionModal();
       setLoading(false);

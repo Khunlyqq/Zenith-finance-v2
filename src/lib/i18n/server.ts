@@ -10,22 +10,37 @@ const translations: Record<Language, any> = { id, en };
  * Usage: const { t, lang } = await getServerTranslation();
  */
 export async function getServerTranslation() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  const lang: Language = user?.user_metadata?.preferences?.lang || "id";
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // Explicitly validate lang or fallback to "id"
+    const langPref = user?.user_metadata?.preferences?.lang;
+    const lang: Language = (langPref === "id" || langPref === "en") ? langPref : "id";
 
-  const t = (path: string): string => {
-    const keys = path.split(".");
-    let result = translations[lang];
+    const t = (path: string): string => {
+      try {
+        const keys = path.split(".");
+        let result = translations[lang] || translations["id"];
 
-    for (const key of keys) {
-      if (result[key] === undefined) return path;
-      result = result[key];
-    }
+        for (const key of keys) {
+          if (!result || typeof result !== 'object') return path;
+          if (result[key] === undefined) return path;
+          result = result[key];
+        }
 
-    return result as string;
-  };
+        return typeof result === 'string' ? result : path;
+      } catch (err) {
+        return path;
+      }
+    };
 
-  return { t, lang };
+    return { t, lang };
+  } catch (error) {
+    console.error("getServerTranslation Error:", error);
+    return {
+      t: (path: string) => path,
+      lang: "id" as Language
+    };
+  }
 }

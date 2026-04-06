@@ -14,10 +14,11 @@ import { getCachedUser } from "@/lib/supabase/user";
 import { redirect } from "next/navigation";
 import { Budget } from "@/types";
 import EmptyState from "@/components/shared/EmptyState";
-
+import { getServerTranslation } from "@/lib/i18n/server";
 
 
 export default async function BudgetPage() {
+  const { t, lang } = await getServerTranslation();
   const user = await getCachedUser();
   if (!user) redirect("/login");
 
@@ -26,7 +27,8 @@ export default async function BudgetPage() {
   // Current month range
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-  const monthName = now.toLocaleString('id-ID', { month: 'long' }).toUpperCase();
+  const locale = lang === "id" ? "id-ID" : "en-US";
+  const monthName = now.toLocaleString(locale, { month: 'long' }).toUpperCase();
 
   // Fetch data
   const monthYear = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -76,12 +78,12 @@ export default async function BudgetPage() {
           style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
         >
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-          <p className="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-2 opacity-80">ANGGARAN {monthName}</p>
+          <p className="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-2 opacity-80">{t("budgets.budget_of")} {monthName}</p>
           <h2 className="text-3xl md:text-4xl font-black text-white leading-none tracking-tighter">
-            Rp {new Intl.NumberFormat('id-ID').format(totalBudget)}
+            Rp {new Intl.NumberFormat(locale).format(totalBudget)}
           </h2>
           <div className="mt-4 flex items-center gap-2 text-[10px] font-black text-white/70 uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full w-fit border border-white/10">
-             <TrendingUp size={14} /> STATUS: AKTIF
+             <TrendingUp size={14} /> STATUS: {t("budgets.status_active")}
           </div>
         </div>
 
@@ -89,12 +91,12 @@ export default async function BudgetPage() {
           className="min-w-full md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#78dc77]/40 hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
-          <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">TERPAKAI SAAT INI</p>
+          <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">{t("budgets.used_currently")}</p>
           <h2 className="text-2xl md:text-3xl font-black font-headline text-[#e0e3e4] tracking-tight line-clamp-1">
-            {new Intl.NumberFormat('id-ID').format(totalSpent)}
+            {new Intl.NumberFormat(locale).format(totalSpent)}
           </h2>
           <p className={`text-[10px] mt-3 font-black tracking-widest uppercase px-3 py-1 bg-[#78dc77]/10 rounded-full w-fit border border-[#78dc77]/10 ${totalSpent > totalBudget ? 'text-red-400 border-red-400/20 bg-red-400/10' : 'text-[#78dc77]'}`}>
-            {Math.round((totalSpent / totalBudget) * 100) || 0}% ALOKASI
+            {Math.round((totalSpent / totalBudget) * 100) || 0}% {t("budgets.allocation")}
           </p>
         </div>
 
@@ -102,13 +104,13 @@ export default async function BudgetPage() {
           className="min-w-full md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#ffb870]/40 hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '255, 184, 112' } as React.CSSProperties}
         >
-          <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">SISA ANGGARAN</p>
+          <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">{t("budgets.remaining_budget")}</p>
           <h2 className="text-2xl md:text-3xl font-black font-headline text-[#ffb870] tracking-tight line-clamp-1">
-            {new Intl.NumberFormat('id-ID').format(Math.max(0, remainingBudget))}
+            {new Intl.NumberFormat(locale).format(Math.max(0, remainingBudget))}
           </h2>
           <div className="flex items-center gap-2 text-[#78dc77] text-[10px] font-black mt-3 uppercase tracking-widest px-3 py-1 bg-[#ffb870]/10 rounded-full w-fit border border-[#ffb870]/10">
              <span className="material-symbols-outlined text-sm">check_circle</span>
-             {remainingBudget > 0 ? "STABIL" : "LIMIT"}
+             {remainingBudget > 0 ? t("budgets.stable") : t("budgets.limit_reached")}
           </div>
         </div>
       </section>
@@ -117,23 +119,23 @@ export default async function BudgetPage() {
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
         <div className="lg:col-span-8 flex flex-col gap-6 md:gap-8">
           <div className="flex justify-between items-baseline mb-2 md:mb-4 px-2 shrink-0">
-            <h3 className="text-2xl md:text-3xl font-black font-headline tracking-tighter text-[#e0e3e4]">Pos Pengeluaran</h3>
-            <button className="text-[#86d2e5] text-[10px] md:text-xs font-black uppercase tracking-widest hover:underline">Kelola Pantauan</button>
+            <h3 className="text-2xl md:text-3xl font-black font-headline tracking-tighter text-[#e0e3e4]">{t("budgets.title")}</h3>
+            <button className="text-[#86d2e5] text-[10px] md:text-xs font-black uppercase tracking-widest hover:underline">{t("budgets.manage_monitoring")}</button>
           </div>
           
           <div className="grid grid-cols-2 lg:grid-cols-2 gap-3 md:gap-8">
             {categories.length === 0 ? (
               <div className="col-span-full">
                 <EmptyState 
-                  title="Kategori Kosong"
-                  description="Belum ada kategori yang tersedia."
+                  title={t("budgets.empty_categories")}
+                  description={t("budgets.empty_categories_desc")}
                 />
               </div>
             ) : budgets.length === 0 ? (
               <div className="col-span-full">
                 <EmptyState 
-                  title="Belum Ada Anggaran"
-                  description="Mulai catat rencana keuanganmu bulan ini."
+                  title={t("budgets.empty_budgets")}
+                  description={t("budgets.empty_budgets_desc")}
                 />
               </div>
             ) : (
@@ -160,12 +162,12 @@ export default async function BudgetPage() {
                           <div>
                             <h4 className="text-[11px] md:text-base font-black text-[#e0e3e4] line-clamp-1">{cat.name}</h4>
                             <p className="text-[7px] md:text-[10px] text-[#899295] font-black tracking-widest uppercase opacity-60">
-                              LIMIT: {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(limit)}
+                              {t("budgets.limit_text")}: {new Intl.NumberFormat(locale, { notation: 'compact' }).format(limit)}
                             </p>
                           </div>
                         </div>
                         <div className="text-left md:text-right">
-                          <p className="text-[11px] md:text-sm font-black text-[#e0e3e4]">{new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(spent)}</p>
+                          <p className="text-[11px] md:text-sm font-black text-[#e0e3e4]">{new Intl.NumberFormat(locale, { notation: 'compact' }).format(spent)}</p>
                           <p className={`text-[7px] md:text-[10px] font-black tracking-widest uppercase ${isOver ? 'text-red-400' : 'text-[#86d2e5]'}`}>
                             {percent}%
                           </p>
@@ -192,7 +194,7 @@ export default async function BudgetPage() {
           >
             <h3 className="text-base md:text-lg font-black font-headline mb-4 md:mb-6 flex items-center gap-2 text-[#e0e3e4]">
               <Sparkles size={16} className="text-[#ffb870]" />
-              Wawasan Pintar
+              {t("budgets.smart_insights")}
             </h3>
             <div className="space-y-6 md:space-y-8">
               {totalSpent > totalBudget * 0.8 ? (
@@ -201,7 +203,7 @@ export default async function BudgetPage() {
                     <AlertTriangle size={16} />
                   </div>
                   <p className="text-[11px] md:text-sm leading-relaxed text-[#bec8cb]">
-                    Waspada! Pengunaan anggaran sudah mencapai <span className="font-black text-red-400">{Math.round((totalSpent/totalBudget)*100)}%</span>.
+                    {t("budgets.alert_high_spending")} <span className="font-black text-red-400">{Math.round((totalSpent/totalBudget)*100)}%</span>.
                   </p>
                 </div>
               ) : (
@@ -210,7 +212,7 @@ export default async function BudgetPage() {
                     <Smile size={16} />
                   </div>
                   <p className="text-[11px] md:text-sm leading-relaxed text-[#bec8cb]">
-                    Bagus! Pengeluaran masih sangat aman di bawah batas. Terus pertahankan!
+                    {t("budgets.good_spending")}
                   </p>
                 </div>
               )}
@@ -220,7 +222,7 @@ export default async function BudgetPage() {
                   <Receipt size={16} />
                 </div>
                 <p className="text-[11px] md:text-sm leading-relaxed text-[#bec8cb]">
-                  Tercatat <span className="font-black text-[#86d2e5]">{monthlyTransactions.length} transaksi</span> terkurasi bulan ini.
+                  {t("budgets.tx_recorded").replace('{count}', String(monthlyTransactions.length))}
                 </p>
               </div>
             </div>
@@ -231,4 +233,3 @@ export default async function BudgetPage() {
 
   );
 }
-

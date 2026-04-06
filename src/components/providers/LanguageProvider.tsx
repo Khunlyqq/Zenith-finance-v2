@@ -53,15 +53,20 @@ export function LanguageProvider({
 
   // Translation function: supports nested keys like "nav.dashboard"
   const t = (path: string): string => {
-    const keys = path.split(".");
-    let result = translations[lang];
+    try {
+      const keys = path.split(".");
+      let result = translations[lang] || translations["id"];
 
-    for (const key of keys) {
-      if (result[key] === undefined) return path; // Return key if not found
-      result = result[key];
+      for (const key of keys) {
+        if (!result || typeof result !== 'object') return path;
+        if (result[key] === undefined) return path;
+        result = result[key];
+      }
+
+      return typeof result === 'string' ? result : path;
+    } catch (err) {
+      return path;
     }
-
-    return result as string;
   };
 
   return (

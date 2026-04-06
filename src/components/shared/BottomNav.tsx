@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function BottomNav() {
@@ -29,17 +29,28 @@ export default function BottomNav() {
               isActive ? "text-[#86d2e5]" : "text-[#899295] hover:text-white/60"
             }`}
           >
-            <div className={`transition-all duration-300 ${isActive ? 'scale-110' : 'scale-100 group-active:scale-90'}`}>
-              <span 
-                className="material-symbols-outlined text-[26px]" 
-                style={{ fontVariationSettings: `'FILL' ${isActive ? 1 : 0}, 'wght' 400` }}
-              >
-                {item.icon}
-              </span>
+            <div className="flex flex-col items-center justify-center h-full">
+              <div className={`transition-all duration-300 ${isActive ? 'scale-110 -translate-y-1' : 'scale-100'}`}>
+                <span 
+                  className="material-symbols-outlined text-[26px]" 
+                  style={{ fontVariationSettings: `'FILL' ${isActive ? 1 : 0}, 'wght' 400` }}
+                >
+                  {item.icon}
+                </span>
+              </div>
+              <AnimatePresence>
+                {isActive && (
+                  <motion.span 
+                    initial={{ opacity: 0, y: 10, height: 0 }}
+                    animate={{ opacity: 1, y: 0, height: 'auto' }}
+                    exit={{ opacity: 0, y: 10, height: 0 }}
+                    className="text-[9px] font-black uppercase tracking-widest text-[#86d2e5] mt-1"
+                  >
+                    {item.name}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </div>
-            <span className={`text-[9px] font-black uppercase tracking-widest transition-all ${isActive ? 'opacity-100' : 'opacity-40'}`}>
-              {item.name}
-            </span>
             
             {isActive && (
               <motion.div 
