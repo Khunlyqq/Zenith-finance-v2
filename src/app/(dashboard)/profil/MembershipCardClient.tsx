@@ -52,11 +52,9 @@ export default function MembershipCardClient({ profile }: any) {
          </button>
        </div>
        <div className="flex justify-between items-center text-[10px] text-[#899295] font-black uppercase tracking-[0.2em] relative z-10">
-          <span>{lang === "id" ? "SIKLUS TAGIHAN AKTIF" : "ACTIVE BILLING CYCLE"}</span>
+          <span>{t("profile.billing_cycle")}</span>
           <span className="text-[#e0e3e4] bg-[#323537] px-4 py-2 rounded-xl">
-            {isPremium 
-              ? (lang === "id" ? "Tahun Pertama (Selesai)" : "First Year (Completed)") 
-              : (lang === "id" ? "Akses Dasar (Permanen)" : "Basic Access (Permanent)")}
+            {isPremium ? t("profile.billing_annual") : t("profile.billing_basic")}
           </span>
        </div>
     </div>

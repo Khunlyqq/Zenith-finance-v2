@@ -55,26 +55,19 @@ async function HeroStats() {
 
     let insightText = "";
     if (monthlyInflow === 0 && monthlyOutflow === 0) {
-      insightText = lang === "id" 
-        ? "Sistem AI sedang menunggu transaksi pertama Anda bulan ini untuk memulai pemetaan prediktif pola arus kas."
-        : "AI system is waiting for your first transaction this month to begin predictive cash flow mapping.";
+      insightText = t("dashboard.ai_waiting");
     } else if (monthlyOutflow > monthlyInflow && monthlyInflow > 0) {
       const ratio = Math.round((monthlyOutflow / monthlyInflow) * 100);
-      insightText = lang === "id"
-        ? `Peringatan Burn Rate: Laju tagihan Anda mencapai ${ratio}% dari perolehan bulan ini. Kurasi ulang dana pasif Anda minggu ini untuk menghindari penyusutan aset.`
-        : `Burn Rate Warning: Your burn rate has reached ${ratio}% of this month's income. Refactor your passive funds this week to avoid asset depletion.`;
+      insightText = t("dashboard.ai_burn_rate").replace("{ratio}", String(ratio));
     } else {
       const savings = monthlyInflow - monthlyOutflow;
       const ratio = monthlyInflow > 0 ? Math.round((savings / monthlyInflow) * 100) : 0;
-      insightText = lang === "id"
-        ? `Akselerasi Kurasi Positif: Algoritma Zenith mendeteksi Anda sukses menyelamatkan ${ratio}% potensi likuiditas. Pertahankan struktur ini!`
-        : `Positive Curation Acceleration: Zenith algorithms detected you successfully saved ${ratio}% of liquidity potential. Maintain this structure!`;
+      insightText = t("dashboard.ai_acceleration").replace("{ratio}", String(ratio));
     }
 
     return (
       <section className="flex flex-col gap-8">
         <WalletCard 
-          initialBalance={totalBalance}
           wallets={wallets}
           lang={lang}
           title={t("dashboard.wallet_title")}
@@ -107,30 +100,6 @@ async function HeroStats() {
               - {new Intl.NumberFormat(locale).format(monthlyOutflow)}
             </p>
           </div>
-        </div>
-
-        {/* 🤖 Premium AI Insights Segment */}
-        <div 
-          className="relative overflow-hidden bg-[#181c1d] rounded-[2.5rem] border border-white/5 p-8 flex flex-col md:flex-row items-center md:items-start gap-8 premium-glow group"
-          style={{ '--card-glow-rgb': isPremium ? '255, 184, 112' : '134, 210, 229'} as React.CSSProperties}
-        >
-          <div className={`w-16 h-16 shrink-0 flex items-center justify-center rounded-[1.5rem] bg-gradient-to-br ${isPremium ? 'from-[#ffb870] to-[#ff9838]' : 'from-[#323537] to-[#181c1d] border border-white/5'} shadow-xl rotate-3 group-hover:rotate-0 transition-transform duration-500`}>
-            <Sparkles size={28} className={isPremium ? "text-[#101415]" : "text-[#899295]"} />
-          </div>
-          
-          <div className="flex-1 relative w-full text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-4 mb-3">
-               <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${isPremium ? 'text-[#ffb870]' : 'text-[#899295]'}`}>{lang === "id" ? "Intelijen AI Zenith" : "Zenith AI Intelligence"}</h4>
-               <span className="w-1.5 h-1.5 rounded-full bg-[#ffb870] animate-pulse"></span>
-            </div>
-            <p className="text-[#e0e3e4] text-sm md:text-lg leading-relaxed font-medium">
-              {insightText}
-            </p>
-          </div>
-
-          {isPremium && (
-            <div className="absolute right-0 top-0 w-64 h-64 bg-[#ffb870]/5 rounded-full blur-3xl group-hover:bg-[#ffb870]/10 transition-all pointer-events-none -translate-y-1/2 translate-x-1/2 duration-700"></div>
-          )}
         </div>
       </section>
     );
@@ -175,8 +144,8 @@ async function RecentTransactions() {
           {(!transactions || transactions.length === 0) && (
             <div className="py-8">
               <EmptyState 
-                title={lang === "id" ? "Belum Ada Transaksi" : "No Transactions Yet"}
-                description={lang === "id" ? "Catatan keuanganmu masih kosong. Mari mulai dengan mencatat transaksi pertama hari ini!" : "Your financial records are empty. Let's start by recording your first transaction today!"}
+                title={t("dashboard.empty_tx_title")}
+                description={t("dashboard.empty_tx_desc")}
               />
             </div>
           )}
@@ -215,7 +184,7 @@ async function CategoryAnalysis() {
       if (!spendingMap[catId]) {
         spendingMap[catId] = { 
           amount: 0, 
-          name: (tx.categories as any)?.name || (lang === "id" ? 'Lainnya' : 'Others'),
+          name: (tx.categories as any)?.name || t("common.others"),
           icon: (tx.categories as any)?.icon || 'payments'
         };
       }
@@ -240,7 +209,7 @@ async function CategoryAnalysis() {
     return (
       <div className="lg:col-span-6 bg-[#181c1d] rounded-3xl p-8 flex flex-col shadow-lg premium-glow cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300" style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}>
         <div className="flex justify-between items-start mb-8">
-          <h3 className="text-lg font-bold text-[#e0e3e4]">{lang === "id" ? "Analisis Kategori" : "Category Analysis"}</h3>
+          <h3 className="text-lg font-bold text-[#e0e3e4]">{t("dashboard.category_analysis")}</h3>
           <button className="text-[#86d2e5] hover:bg-[#86d2e5]/10 p-2 rounded-xl transition-all"><MoreHorizontal size={20} /></button>
         </div>
         <div className="flex-1 flex flex-col justify-center">
@@ -248,8 +217,8 @@ async function CategoryAnalysis() {
             <CategoryDonut data={sortedStats} />
           ) : (
             <EmptyState 
-              title={lang === "id" ? "Analisis Masih Kosong" : "Analysis is Empty"}
-              description={lang === "id" ? "Lakukan beberapa pengeluaran bulan ini untuk mulai melihat analisis pintarmu!" : "Make some expenses this month to start seeing your smart analysis!"}
+              title={t("dashboard.empty_analysis_title")}
+              description={t("dashboard.empty_analysis_desc")}
             />
           )}
         </div>
@@ -266,64 +235,135 @@ async function MonthlyBudgetStats() {
   try {
     const { t, lang } = await getServerTranslation();
     const user = await getCachedUser();
-    if (!user) return <SectionSkeleton />;
+    if (!user) return null;
 
     const supabase = await createClient();
     
+    // Current month identifier
     const now = new Date();
+    const monthYear = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
     const locale = lang === "id" ? "id-ID" : "en-US";
     const monthName = now.toLocaleString(locale, { month: 'long', year: 'numeric' }).toUpperCase();
 
-    const { data: transactions } = await supabase
-      .from("transactions")
-      .select("amount, type")
-      .eq("user_id", user.id)
-      .eq("type", "expense")
-      .gte("date", firstDay);
+    // Fetch real budgets
+    const [budgetsRes, transactionsRes] = await Promise.all([
+      supabase.from("budgets").select("*").eq("user_id", user.id).eq("month", monthYear),
+      supabase.from("transactions").select("amount, type").eq("user_id", user.id).eq("type", "expense").gte("date", firstDay)
+    ]);
 
-    const totalSpent = (transactions || []).reduce((sum: number, tx: any) => sum + Number(tx.amount), 0);
-    const mockBudget = 15000000; // Mock budget: 15jt
-    const percent = Math.min(100, Math.round((totalSpent / mockBudget) * 100));
+    const budgets = budgetsRes.data || [];
+    if (budgets.length === 0) return null; // Hide if no budget
+
+    const totalSpent = (transactionsRes.data || []).reduce((sum: number, tx: any) => sum + Number(tx.amount), 0);
+    const totalBudget = budgets.reduce((sum: number, b: any) => sum + Number(b.amount), 0);
+    const percent = Math.min(100, Math.round((totalSpent / totalBudget) * 100));
 
     return (
       <section 
-        className="bg-[#181c1d] rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 shadow-xl border border-[#899295]/5 premium-glow shrink-0 transition-all font-headline"
+        className="bg-[#181c1d] rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 shadow-xl border border-[#899295]/5 premium-glow h-full transition-all font-headline"
         style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
       >
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-10 gap-6">
+        <div className="flex flex-col gap-6">
           <div>
-            <h3 className="text-2xl md:text-3xl font-black tracking-tighter mb-2 italic">{t("dashboard.budget_status")}</h3>
-            <p className="text-[10px] md:text-xs text-[#899295] font-black uppercase tracking-[0.3em]">{lang === "id" ? "EKSEKUSI DATA" : "DATA EXECUTION"} {monthName}</p>
+            <h3 className="text-xl md:text-2xl font-black tracking-tighter mb-1 italic">{t("dashboard.budget_status")}</h3>
+            <p className="text-[9px] text-[#899295] font-black uppercase tracking-[0.3em]">{monthName}</p>
           </div>
-          <div className="flex gap-4">
-            <div className="text-left md:text-right">
-              <p className="text-[10px] text-[#899295] font-black uppercase tracking-widest mb-1 opacity-50">{lang === "id" ? "TERPAKAI SAAT INI" : "CURRENTLY USED"}</p>
-              <p className="text-xl md:text-3xl font-black text-[#e0e3e4]">
+          
+          <div className="space-y-4">
+            <div>
+              <p className="text-[10px] text-[#899295] font-black uppercase tracking-widest mb-1 opacity-50">{t("dashboard.currently_used")}</p>
+              <p className="text-2xl font-black text-[#e0e3e4]">
                 Rp {new Intl.NumberFormat(locale).format(totalSpent)} 
-                <span className="text-[10px] md:text-sm font-normal opacity-40 ml-3">/ Rp {new Intl.NumberFormat(locale, { notation: 'compact' }).format(mockBudget)}</span>
               </p>
+              <p className="text-[10px] font-bold opacity-40 mt-1">/ Rp {new Intl.NumberFormat(locale, { notation: 'compact' }).format(totalBudget)}</p>
+            </div>
+
+            <div className="w-full h-2 bg-[#323537] rounded-full overflow-hidden shadow-inner relative">
+              <div 
+                className={`h-full transition-all duration-1000 ${percent > 90 ? 'bg-red-400 shadow-[0_0_12px_rgba(255,68,68,0.4)]' : 'bg-gradient-to-r from-[#86d2e5] to-[#006778] shadow-[0_0_12px_rgba(134,210,229,0.4)]'}`} 
+                style={{ width: `${percent}%` }}
+              ></div>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <p className="text-[8px] text-[#899295] font-black uppercase tracking-widest">
+                {percent}% {t("nav.anggaran")}
+              </p>
+              <Link href="/anggaran" className="text-[#86d2e5] text-[9px] font-black uppercase tracking-[0.2em] hover:underline">{t("common.details")}</Link>
             </div>
           </div>
-        </div>
-
-        <div className="w-full h-2 md:h-3 bg-[#323537] rounded-full overflow-hidden shadow-inner relative">
-          <div 
-            className={`h-full transition-all duration-1000 ${percent > 90 ? 'bg-red-400 shadow-[0_0_12px_rgba(255,68,68,0.4)]' : 'bg-gradient-to-r from-[#86d2e5] to-[#006778] shadow-[0_0_12px_rgba(134,210,229,0.4)]'}`} 
-            style={{ width: `${percent}%` }}
-          ></div>
-        </div>
-        <div className="mt-4 flex justify-between items-center">
-          <p className="text-[8px] md:text-[10px] text-[#899295] font-black uppercase tracking-widest">
-             {lang === "id" ? "Eksekusi" : "Execution"} {percent}% {lang === "id" ? "Anggaran" : "Budget"}
-          </p>
-          <Link href="/anggaran" className="text-[#86d2e5] text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] hover:underline">{lang === "id" ? "Detail Analitik" : "Analytical Details"}</Link>
         </div>
       </section>
     );
   } catch (err) {
     console.error("MonthlyBudgetStats Error:", err);
-    return <SectionSkeleton />;
+    return null;
+  }
+}
+
+async function ZenithAIIntelligence() {
+  try {
+    const { t, lang } = await getServerTranslation();
+    const user = await getCachedUser();
+    if (!user) return null;
+
+    const supabase = await createClient();
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+    const { data: monthlyTransactions } = await supabase
+      .from("transactions")
+      .select("amount, type")
+      .eq("user_id", user.id)
+      .gte("date", firstDay);
+
+    const monthlyInflow = (monthlyTransactions || [])
+      .filter((tx: any) => tx.type === 'income')
+      .reduce((sum: number, tx: any) => sum + Number(tx.amount), 0);
+    const monthlyOutflow = (monthlyTransactions || [])
+      .filter((tx: any) => tx.type === 'expense')
+      .reduce((sum: number, tx: any) => sum + Number(tx.amount), 0);
+
+    let insightText = "";
+    if (monthlyInflow === 0 && monthlyOutflow === 0) {
+      insightText = t("dashboard.ai_waiting");
+    } else if (monthlyOutflow > monthlyInflow && monthlyInflow > 0) {
+      const ratio = Math.round((monthlyOutflow / monthlyInflow) * 100);
+      insightText = t("dashboard.ai_burn_rate").replace("{ratio}", String(ratio));
+    } else {
+      const savings = monthlyInflow - monthlyOutflow;
+      const ratio = monthlyInflow > 0 ? Math.round((savings / monthlyInflow) * 100) : 0;
+      insightText = t("dashboard.ai_acceleration").replace("{ratio}", String(ratio));
+    }
+
+    return (
+      <div 
+        className="relative overflow-hidden bg-[#181c1d] rounded-3xl md:rounded-[2.5rem] p-8 md:p-10 border border-white/5 h-full flex flex-col premium-glow group"
+        style={{ '--card-glow-rgb': '255, 184, 112'} as React.CSSProperties}
+      >
+        <div className="flex items-center gap-4 mb-6">
+          <div className={`w-12 h-12 shrink-0 flex items-center justify-center rounded-2xl bg-gradient-to-br from-[#ffb870] to-[#ff9838] shadow-xl rotate-3 group-hover:rotate-0 transition-transform duration-500`}>
+            <Sparkles size={20} className="text-[#101415]" />
+          </div>
+          <div>
+             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ffb870]">{t("dashboard.ai_title")}</h4>
+             <span className="flex items-center gap-1.5 mt-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ffb870] animate-pulse"></span>
+                <span className="text-[8px] font-bold text-[#899295] uppercase tracking-widest">LIVE ANALYSIS</span>
+             </span>
+          </div>
+        </div>
+        
+        <p className="text-[#e0e3e4] text-sm md:text-base leading-relaxed font-medium flex-1">
+          {insightText}
+        </p>
+
+        <div className="absolute right-0 bottom-0 w-32 h-32 bg-[#ffb870]/5 rounded-full blur-3xl group-hover:bg-[#ffb870]/10 transition-all pointer-events-none translate-y-1/2 translate-x-1/2"></div>
+      </div>
+    );
+  } catch (err) {
+    return null;
   }
 }
 function SectionSkeleton() {
@@ -347,9 +387,15 @@ export default async function DashboardPage() {
         <HeroStats />
       </Suspense>
 
-      <Suspense fallback={<SectionSkeleton />}>
-        <MonthlyBudgetStats />
-      </Suspense>
+      {/* NEW: Side-by-side Budget & AI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <Suspense fallback={<SectionSkeleton />}>
+          <MonthlyBudgetStats />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <ZenithAIIntelligence />
+        </Suspense>
+      </div>
 
       {/* Main Grid — Responsive 2nd column grid on mobile, desktop 12-column */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-12">

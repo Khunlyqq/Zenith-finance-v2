@@ -22,16 +22,37 @@ export default async function SavingsPage() {
   const totalCollected = goals.reduce((sum, g) => sum + Number(g.current_amount), 0);
   const overallProgress = totalTarget > 0 ? Math.round((totalCollected / totalTarget) * 100) : 0;
 
-  // Reconstruct 5 months of history for chart (Mocking for now as per current spec)
+  // Fetch all transactions to calculate historical balance
+  const { data: transactions } = await supabase
+    .from("transactions")
+    .select("amount, type, date")
+    .eq("user_id", user.id)
+    .order("date", { ascending: true });
+
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
   const now = new Date();
   const historyData = [];
   
+  const allTxs = transactions || [];
+
   for (let i = 4; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    // Move to end of that month
+    const endOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59);
+    
+    // Calculate balance at that point in time
+    // Current totalSavings is the balance NOW.
+    // To get balance then: totalSavings - net_change(from then until now)
+    const netChangeSinceThen = allTxs
+      .filter(tx => new Date(tx.date) > endOfMonth)
+      .reduce((sum, tx) => {
+        const amt = Number(tx.amount);
+        return tx.type === 'income' ? sum + amt : sum - amt;
+      }, 0);
+
     historyData.push({
-      month: months[d.getMonth()],
-      balance: totalSavings - (i * (totalSavings * 0.05)) 
+      month: months[endOfMonth.getMonth()],
+      balance: Math.max(0, totalSavings - netChangeSinceThen)
     });
   }
 

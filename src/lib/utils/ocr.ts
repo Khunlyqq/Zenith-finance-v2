@@ -38,7 +38,7 @@ const parseCurrencyString = (str: string): number => {
   return parseFloat(clean) || 0;
 };
 
-export const extractReceiptData = async (file: File): Promise<ScanResult> => {
+export const extractReceiptData = async (file: File, lang: 'id' | 'en' = 'id'): Promise<ScanResult> => {
   const worker = await createWorker('ind+eng'); // Support ID and EN
   
   try {
@@ -46,7 +46,7 @@ export const extractReceiptData = async (file: File): Promise<ScanResult> => {
     const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
     // 1. Identify Vendor (First few lines that aren't purely numeric/dates)
-    let vendor = "Struk Belanja";
+    let vendor = lang === 'id' ? "Struk Belanja" : "Shopping Receipt";
     const noiseWords = ['tgl', 'jam', 'no.', 'struk', 'kasir', 'telp', 'id', 'pajak', 'tax', 'bukti'];
     
     for (let i = 0; i < Math.min(lines.length, 6); i++) {
@@ -78,20 +78,20 @@ export const extractReceiptData = async (file: File): Promise<ScanResult> => {
     }
 
     // 3. Infer Category
-    let category = "General";
+    let category = lang === 'id' ? "Lainnya" : "Others";
     const lowerText = text.toLowerCase();
     if (lowerText.includes('makan') || lowerText.includes('food') || lowerText.includes('resto') || lowerText.includes('kopi') || lowerText.includes('cafe')) {
-      category = "Makanan & Minuman";
+      category = lang === 'id' ? "Makanan & Minuman" : "Food & Drink";
     } else if (lowerText.includes('grab') || lowerText.includes('gojek') || lowerText.includes('ojek') || lowerText.includes('trans') || lowerText.includes('taxi')) {
-      category = "Transportasi";
+      category = lang === 'id' ? "Transportasi" : "Transportation";
     } else if (lowerText.includes('pln') || lowerText.includes('listrik') || lowerText.includes('air') || lowerText.includes('internet') || lowerText.includes('wifi')) {
-      category = "Tagihan";
+      category = lang === 'id' ? "Tagihan" : "Bills";
     } else if (lowerText.includes('indo') || lowerText.includes('alfa') || lowerText.includes('market') || lowerText.includes('belanja') || lowerText.includes('shop')) {
-      category = "Belanja";
+      category = lang === 'id' ? "Belanja" : "Shopping";
     }
 
     return {
-      amount: maxAmount || 50000, // Fallback if no amount detected
+      amount: maxAmount || (lang === 'id' ? 50000 : 50), // Fallback
       note: vendor,
       category,
       confidence: text.length > 20 ? 0.8 : 0.4

@@ -17,10 +17,11 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import ProfileCardClient from "./ProfileCardClient";
 import MembershipCardClient from "./MembershipCardClient";
-import LanguageSwitcher from "./LanguageSwitcher";
-import ProfileStatsClient from "./ProfileStatsClient"; // We'll create this to handle t()
+import ProfileStatsClient from "./ProfileStatsClient"; 
+import { getServerTranslation } from "@/lib/i18n/server";
 
 export default async function ProfilePage() {
+  const { t } = await getServerTranslation();
   const user = await getCachedUser();
   if (!user) redirect("/login");
 
@@ -55,16 +56,14 @@ export default async function ProfilePage() {
 
          {/* Quick Account Settings Link */}
          <div className="lg:col-span-4 flex flex-col min-h-0 gap-6">
-            <LanguageSwitcher />
-
             <Link href="/pengaturan" className="bg-[#181c1d] rounded-[2rem] p-8 flex items-center justify-between group hover:bg-[#1c2021] border border-[#899295]/5 transition-all h-[120px]">
                <div className="flex items-center gap-6">
                   <div className="w-14 h-14 bg-[#323537] rounded-[1.2rem] flex items-center justify-center text-[#899295] group-hover:text-[#86d2e5] transition-colors shrink-0">
                      <Settings size={24} />
                   </div>
                   <div className="text-left">
-                     <p className="text-base font-bold text-[#e0e3e4]">Pengaturan Akun</p>
-                     <p className="text-[10px] font-black text-[#899295] uppercase tracking-widest mt-1">Keamanan & Preferensi</p>
+                     <p className="text-base font-bold text-[#e0e3e4]">{t("profile.account_settings")}</p>
+                     <p className="text-[10px] font-black text-[#899295] uppercase tracking-widest mt-1">{t("profile.security_prec")}</p>
                   </div>
                </div>
                <ChevronRight size={20} className="text-[#899295] group-hover:translate-x-1 group-hover:text-[#86d2e5] transition-all" />
@@ -75,11 +74,11 @@ export default async function ProfilePage() {
                   <ShieldCheck size={100} />
                </div>
                <div className="text-left relative z-10">
-                  <p className="text-base font-black text-red-400">Area Berbahaya</p>
-                  <p className="text-[9px] font-black text-red-400/60 uppercase tracking-[0.2em] mt-1 mb-2">Sesi ini bersifat rahasia</p>
+                  <p className="text-base font-black text-red-400">{t("profile.danger_zone")}</p>
+                  <p className="text-[9px] font-black text-red-400/60 uppercase tracking-[0.2em] mt-1 mb-2">{t("profile.danger_desc")}</p>
                </div>
                <button className="w-full relative z-10 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-red-400 border border-red-400/20 rounded-xl hover:bg-red-400 hover:text-[#101415] transition-all flex items-center justify-center gap-3">
-                 <LogOut size={16} /> Keluar Akun Sekarang
+                 <LogOut size={16} /> {t("profile.logout_now")}
                </button>
             </div>
          </div>

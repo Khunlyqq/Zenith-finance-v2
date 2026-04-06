@@ -47,7 +47,12 @@
     "membership_standard": "Zenith Standar",
     "membership_standard_desc": "Akun dasar dengan fungsionalitas pencatatan esensial. Optimalkan perjalanan finansial Anda dengan paket berkelanjutan.",
     "upgrade": "Tingkatkan Ke Premium",
-    "downgrade": "Turunkan ke Standar"
+    "downgrade": "Turunkan ke Standar",
+    "account_settings": "Pengaturan Akun",
+    "security_prec": "Keamanan & Preferensi",
+    "danger_zone": "Area Berbahaya",
+    "danger_desc": "Sesi ini bersifat rahasia",
+    "logout_now": "Keluar Akun Sekarang"
   },
   "dashboard": {
     "wallet_title": "ZENITH CAPITAL ASSET",
@@ -55,7 +60,8 @@
     "outflow": "PENGELUARAN BULAN INI",
     "budget_status": "Status Anggaran",
     "recent_tx": "Transaksi Terbaru",
-    "see_all": "Lihat Semua"
+    "see_all": "Lihat Semua",
+    "protection_active": "PROTEKSI AKTIF"
   },
   "transactions": {
     "inflow_log": "LOG PEMASUKAN",
@@ -75,7 +81,29 @@
     "options": "Opsi",
     "empty_title": "Riwayat Transaksi Kosong",
     "empty_desc": "Sepertinya kamu belum mencatat pengeluaran atau pemasukan.",
-    "showing": "MENAMPILKAN"
+    "showing": "MENAMPILKAN",
+    "modal_title": "Catat Transaksi",
+    "modal_subtitle": "THE DIGITAL CURATOR FLOW",
+    "smart_scan": "Pindai Struk AI",
+    "smart_scan_premium": "Pindai Struk (Premium)",
+    "ai_reading": "AI Membaca Struk...",
+    "type_expense": "PENGELUARAN",
+    "type_income": "PEMASUKAN",
+    "nominal_label": "NOMINAL (RP)",
+    "wallet_label": "Dompet",
+    "category_label": "Kategori",
+    "date_label": "Tanggal",
+    "note_label": "Catatan",
+    "note_placeholder": "Kopi pagi ini...",
+    "cancel_btn": "BATALKAN",
+    "saving_btn": "MENYIMPAN...",
+    "save_btn": "SIMPAN TRANSAKSI",
+    "toast_connecting": "Menghubungkan ke Mesin AI Zenith...",
+    "toast_analyzing": "Menganalisis Piksel Foto & OCR...",
+    "toast_success": "Berhasil! AI Zenith validasi: Rp {amount}",
+    "toast_error": "Gagal memproses struk. Coba lagi dengan foto yang lebih jelas.",
+    "toast_premium_only": "Fitur Pindai Struk Pintar dengan AI hanya tersedia untuk akun Zenith Premium.",
+    "toast_offline": "Tersimpan Luring! Menunggu koneksi kembali..."
   },
   "settings": {
     "title": "Pengaturan",
@@ -103,7 +131,17 @@
     "push_notifications": "Push Notification",
     "push_desc": "Notifikasi langsung ke handphone",
     "email_reports": "Laporan Surel Berkala",
-    "email_desc": "Rekap finansial reguler bulanan"
+    "email_desc": "Rekap finansial reguler bulanan",
+    "toast_biometric_success": "Biometrik berhasil dipindai ke perangkat Anda!",
+    "toast_biometric_cancelled": "Registrasi biometrik dibatalkan pengguna.",
+    "toast_biometric_unavailable": "Perangkat Anda tidak menyetel FaceID/TouchID.",
+    "toast_push_unsupported": "Browser tidak mendukung notifikasi push.",
+    "toast_notif_body": "Konfigurasi terhubung. Pemantauan portofolio waktu nyata kami sekarang akan lansung mengabarimu melalui OS ketika ada pergerakan tidak wajar.",
+    "toast_push_enabled": "Push Notifikasi OS diaktifkan!",
+    "toast_notif_denied": "Izin Notifikasi ditahan oleh browser.",
+    "toast_email_success": "Sukses mendaftar! AI kami akan memulai draf ulasan transaksi kesurel Anda minggu depan.",
+    "toast_lang_updated": "Bahasa diubah ke Indonesia (IDR)",
+    "toast_pwd_limit": "Batas waktu pembaruan! Silakan tunggu {days} hari lagi."
   },
   "budgets": {
     "title": "Pos Pengeluaran",

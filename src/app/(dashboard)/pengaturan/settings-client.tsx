@@ -54,37 +54,35 @@ export default function SettingsClient({ profile, user }: any) {
               timeout: 60000
             }
           });
-          toast.success(lang === 'id' ? "Biometrik berhasil dipindai ke perangkat Anda!" : "Biometrics successfully scanned to your device!");
+          toast.success(t("settings.toast_biometric_success"));
         } catch(e: any) {
           if(e.name === 'NotAllowedError') {
-             toast.error(lang === 'id' ? "Registrasi biometrik dibatalkan pengguna." : "Biometric registration cancelled by user.");
+             toast.error(t("settings.toast_biometric_cancelled"));
           } else {
-             toast.error(lang === 'id' ? "Perangkat Anda tidak menyetel FaceID/TouchID." : "Your device doesn't have FaceID/TouchID set up.");
+             toast.error(t("settings.toast_biometric_unavailable"));
           }
           finalValue = currentValue;
         }
       } 
       else if (key === 'pushNotif' && newValue) {
         if (!("Notification" in window)) {
-          toast.error(lang === 'id' ? "Browser tidak mendukung notifikasi push." : "Browser does not support push notifications.");
+          toast.error(t("settings.toast_push_unsupported"));
           finalValue = currentValue;
         } else {
           const permission = await Notification.requestPermission();
           if (permission === "granted") {
             new Notification(lang === 'id' ? "Zenith Keuangan Mapan" : "Zenith Finance Ready", {
-              body: lang === 'id' 
-                ? "Konfigurasi terhubung. Pemantauan portofolio waktu nyata kami sekarang akan lansung mengabarimu melalui OS ketika ada pergerakan tidak wajar."
-                : "Configuration connected. Our real-time portfolio monitoring will now notify you directly through the OS when unusual movements occur.",
+              body: t("settings.toast_notif_body"),
             });
-            toast.success(lang === 'id' ? "Push Notifikasi OS diaktifkan!" : "OS Push Notifications enabled!");
+            toast.success(t("settings.toast_push_enabled"));
           } else {
-            toast.error(lang === 'id' ? "Izin Notifikasi ditahan oleh browser." : "Notification permission denied by browser.");
+            toast.error(t("settings.toast_notif_denied"));
             finalValue = currentValue;
           }
         }
       }
       else if (key === 'emailNotif' && newValue) {
-        toast.success(lang === 'id' ? "Sukses mendaftar! AI kami akan memulai draf ulasan transaksi kesurel Anda minggu depan." : "Successfully registered! Our AI will start drafting transaction reviews to your email next week.");
+        toast.success(t("settings.toast_email_success"));
       }
     } catch(err) {
       console.error(err);
@@ -97,12 +95,12 @@ export default function SettingsClient({ profile, user }: any) {
   const handleLanguageToggle = async () => {
     const newLang = lang === 'en' ? 'id' : 'en';
     await setLang(newLang);
-    toast.success(newLang === 'en' ? "Language updated to English (USD)" : "Bahasa diubah ke Indonesia (IDR)");
+    toast.success(t("settings.toast_lang_updated"));
   };
 
   const handleResetPassword = async () => {
     if(!canResetPwd) {
-      toast.error(lang === 'id' ? `Batas waktu pembaruan! Silakan tunggu ${daysLeftToReset} hari lagi.` : `Update limit! Please wait ${daysLeftToReset} more days.`);
+      toast.error(t("settings.toast_pwd_limit").replace("{days}", String(daysLeftToReset)));
       return;
     }
     
@@ -205,7 +203,7 @@ export default function SettingsClient({ profile, user }: any) {
                {!showConfirmPwd ? (
                  <button 
                     onClick={() => {
-                       if(!canResetPwd) toast.error(lang === 'id' ? `Batas waktu! Silakan tunggu ${daysLeftToReset} hari lagi.` : `Timeout! Please wait ${daysLeftToReset} more days.`);
+                       if(!canResetPwd) toast.error(t("settings.toast_pwd_limit").replace("{days}", String(daysLeftToReset)));
                        else setShowConfirmPwd(true);
                     }}
                     className="w-full relative flex items-center justify-center gap-2 bg-[#323537]/50 hover:bg-[#78dc77]/10 text-[#899295] hover:text-[#78dc77] py-5 rounded-2xl text-[10px] uppercase font-black tracking-widest transition-all">

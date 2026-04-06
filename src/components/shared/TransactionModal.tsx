@@ -89,13 +89,13 @@ export default function TransactionModal() {
     setFetchingScan(true);
     
     // AI Step 1: Connectivity
-    const processingToast = toast.loading(lang === 'id' ? "Menghubungkan ke Mesin AI Zenith..." : "Connecting to Zenith AI Engine...");
+    const processingToast = toast.loading(t("transactions.toast_connecting"));
     
     try {
       // AI Step 2: OCR Analysis
-      toast.loading(lang === 'id' ? "Menganalisis Piksel Foto & OCR..." : "Analyzing Photo Pixels & OCR...", { id: processingToast });
+      toast.loading(t("transactions.toast_analyzing"), { id: processingToast });
       
-      const result = await extractReceiptData(file);
+      const result = await extractReceiptData(file, lang as 'id' | 'en');
       
       // Final Result
       setValue("amount", result.amount);
@@ -113,14 +113,14 @@ export default function TransactionModal() {
         if (cat) setValue("category_id", cat.id);
       }
 
-      toast.success(lang === 'id' ? `Berhasil! AI Zenith validasi: Rp ${new Intl.NumberFormat('id-ID').format(result.amount)}` : `Finished! Zenith AI verified: Rp ${new Intl.NumberFormat('id-ID').format(result.amount)}`, { 
+      toast.success(t("transactions.toast_success").replace("{amount}", new Intl.NumberFormat(lang === 'id' ? 'id-ID' : 'en-US').format(result.amount)), { 
         id: processingToast,
         icon: <Sparkles size={16} className="text-[#ffb870]"/>,
         duration: 5000
       });
     } catch (err) {
       console.error(err);
-      toast.error(lang === 'id' ? "Gagal memproses struk. Coba lagi dengan foto yang lebih jelas." : "Failed to process receipt. Try again with a clearer photo.", { id: processingToast });
+      toast.error(t("transactions.toast_error"), { id: processingToast });
     } finally {
       setFetchingScan(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -129,7 +129,7 @@ export default function TransactionModal() {
 
   const handleSmartScan = () => {
     if (!isPremium) {
-      toast.error(lang === 'id' ? "Fitur Pindai Struk Pintar dengan AI hanya tersedia untuk akun Zenith Premium." : "AI Smart Scan feature is only available for Zenith Premium accounts.", { icon: <Lock size={16} /> });
+      toast.error(t("transactions.toast_premium_only"), { icon: <Lock size={16} /> });
       return;
     }
     
@@ -144,7 +144,7 @@ export default function TransactionModal() {
       pending.push({ ...data, _id: crypto.randomUUID(), createdAt: new Date().toISOString() });
       localStorage.setItem('zenith_pending_tx', JSON.stringify(pending));
       
-      toast.success("Tersimpan Luring! Menunggu koneksi kembali...");
+      toast.success(t("transactions.toast_offline"));
       reset();
       closeTransactionModal();
       return;
@@ -202,8 +202,8 @@ export default function TransactionModal() {
           {/* Header */}
           <div className="bg-gradient-to-r from-[#181c1d] to-[#101415] p-8 border-b border-white/5 flex justify-between items-center">
             <div>
-              <h3 className="text-2xl font-black font-headline tracking-tighter">Catat Transaksi</h3>
-              <p className="text-[10px] text-[#899295] font-black uppercase tracking-widest mt-1">THE DIGITAL CURATOR FLOW</p>
+              <h3 className="text-2xl font-black font-headline tracking-tighter">{t("transactions.modal_title")}</h3>
+              <p className="text-[10px] text-[#899295] font-black uppercase tracking-widest mt-1">{t("transactions.modal_subtitle")}</p>
             </div>
             <button 
               onClick={closeTransactionModal}
@@ -237,7 +237,7 @@ export default function TransactionModal() {
                 <Camera size={16} className={isPremium ? "text-[#ffb870]" : "text-[#899295]"} />
               )}
               <span className="text-[10px] font-black uppercase tracking-widest z-10">
-                {fetchingScan ? "AI Membaca Struk..." : isPremium ? "Pindai Struk AI" : "Pindai Struk (Premium)"}
+                {fetchingScan ? t("transactions.ai_reading") : isPremium ? t("transactions.smart_scan") : t("transactions.smart_scan_premium")}
               </span>
               {isPremium && <Sparkles size={14} className="absolute right-4 text-[#ffb870]/50 group-hover:text-[#ffb870] transition-colors" />}
             </button>
@@ -253,7 +253,7 @@ export default function TransactionModal() {
                     : "text-[#899295] hover:text-white"
                 }`}
               >
-                PENGELUARAN
+                {t("transactions.type_expense")}
               </button>
               <button
                 type="button"
@@ -264,13 +264,13 @@ export default function TransactionModal() {
                     : "text-[#899295] hover:text-white"
                 }`}
               >
-                PEMASUKAN
+                {t("transactions.type_income")}
               </button>
             </div>
 
             {/* Amount */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2">NOMINAL (RP)</label>
+              <label className="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2">{t("transactions.nominal_label")}</label>
               <div className="relative group">
                 <span className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-black text-[#899295] group-focus-within:text-[#86d2e5]">Rp</span>
                 <input 
@@ -287,13 +287,13 @@ export default function TransactionModal() {
               {/* Wallet Selection */}
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2 flex items-center gap-2">
-                  <Wallet size={12} /> Dompet
+                  <Wallet size={12} /> {t("transactions.wallet_label")}
                 </label>
                 <select 
                   {...register("wallet_id")}
                   className="w-full bg-[#181c1d] border border-white/5 rounded-2xl px-4 py-3.5 text-sm font-bold outline-none focus:ring-2 focus:ring-[#86d2e5]/20"
                 >
-                  <option value="">Pilih Dompet</option>
+                  <option value="">{lang === 'id' ? 'Pilih Dompet' : 'Select Wallet'}</option>
                   {wallets.map(w => (
                     <option key={w.id} value={w.id}>{w.name}</option>
                   ))}
@@ -304,13 +304,13 @@ export default function TransactionModal() {
               {/* Category Selection */}
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2 flex items-center gap-2">
-                  <Tag size={12} /> Kategori
+                  <Tag size={12} /> {t("transactions.category_label")}
                 </label>
                 <select 
                   {...register("category_id")}
                   className="w-full bg-[#181c1d] border border-white/5 rounded-2xl px-4 py-3.5 text-sm font-bold outline-none focus:ring-2 focus:ring-[#86d2e5]/20"
                 >
-                  <option value="">Pilih Kategori</option>
+                  <option value="">{lang === 'id' ? 'Pilih Kategori' : 'Select Category'}</option>
                   {categories.map(c => (
                     <option key={c.id} value={c.id}>{c.name}</option>
                   ))}
@@ -322,7 +322,7 @@ export default function TransactionModal() {
               {/* Date */}
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2 flex items-center gap-2">
-                  <Calendar size={12} /> Tanggal
+                  <Calendar size={12} /> {t("transactions.date_label")}
                 </label>
                 <input 
                   type="date"
@@ -335,12 +335,12 @@ export default function TransactionModal() {
               {/* Note */}
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-[#899295] uppercase tracking-widest px-2 flex items-center gap-2">
-                  <PenLine size={12} /> Catatan
+                  <PenLine size={12} /> {t("transactions.note_label")}
                 </label>
                 <input 
                   type="text"
                   {...register("note")}
-                  placeholder="Kopi pagi ini..."
+                  placeholder={t("transactions.note_placeholder")}
                   className="w-full bg-[#181c1d] border border-white/5 rounded-2xl px-4 py-3.5 text-sm font-bold outline-none focus:ring-2 focus:ring-[#86d2e5]/20"
                 />
                 {errors.note && <p className="text-red-400 text-[10px] font-bold">{errors.note.message}</p>}
@@ -354,17 +354,17 @@ export default function TransactionModal() {
                 onClick={closeTransactionModal}
                 className="flex-1 py-4 bg-white/5 hover:bg-white/10 text-[#899295] hover:text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl transition-all"
               >
-                BATALKAN
+                {t("transactions.cancel_btn")}
               </button>
               <button
                 type="submit"
                 disabled={loading}
                 className="flex-[2] py-4 bg-gradient-to-br from-[#86d2e5] to-[#006778] text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {loading ? "MENYIMPAN..." : (
+                {loading ? t("transactions.saving_btn") : (
                   <>
                     <Plus size={18} />
-                    <span>SIMPAN TRANSAKSI</span>
+                    <span>{t("transactions.save_btn")}</span>
                   </>
                 )}
               </button>

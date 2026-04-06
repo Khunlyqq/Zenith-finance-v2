@@ -10,14 +10,14 @@ export default function ProfileCardClient({
   profile: any;
   user: any;
 }) {
-  const { lang } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const joinDate = user.created_at 
     ? new Date(user.created_at).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-US', { 
         month: 'long', 
         year: 'numeric' 
       }) 
-    : (lang === 'id' ? 'Tidak diketahui' : 'Unknown');
+    : t("common.unknown");
 
   return (
     <div 
@@ -53,7 +53,7 @@ export default function ProfileCardClient({
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/5">
                 <Calendar size={14} className="text-[#899295]" />
-                <span className="text-xs text-[#bec8cb] font-medium">{lang === 'id' ? 'Bergabung sejak' : 'Joined since'} {joinDate}</span>
+                <span className="text-xs text-[#bec8cb] font-medium">{t("profile.joined_since")} {joinDate}</span>
               </div>
             </div>
           </div>

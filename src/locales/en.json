@@ -47,7 +47,12 @@
     "membership_standard": "Zenith Standard",
     "membership_standard_desc": "Basic account with essential tracking functionality. Optimize your financial journey with our sustainable plans.",
     "upgrade": "Upgrade to Premium",
-    "downgrade": "Downgrade to Standard"
+    "downgrade": "Downgrade to Standard",
+    "account_settings": "Account Settings",
+    "security_prec": "Security & Preferences",
+    "danger_zone": "Danger Zone",
+    "danger_desc": "This session is confidential",
+    "logout_now": "Sign Out of Account"
   },
   "dashboard": {
     "wallet_title": "ZENITH CAPITAL ASSET",
@@ -55,7 +60,8 @@
     "outflow": "MONTHLY OUTFLOW",
     "budget_status": "Budget Status",
     "recent_tx": "Recent Transactions",
-    "see_all": "See All"
+    "see_all": "See All",
+    "protection_active": "PROTECTION ACTIVE"
   },
   "transactions": {
     "inflow_log": "INFLOW LOG",
@@ -75,7 +81,29 @@
     "options": "Options",
     "empty_title": "Transaction History Empty",
     "empty_desc": "It seems you haven't recorded any expenses or income.",
-    "showing": "SHOWING"
+    "showing": "SHOWING",
+    "modal_title": "Record Transaction",
+    "modal_subtitle": "THE DIGITAL CURATOR FLOW",
+    "smart_scan": "AI Smart Scan",
+    "smart_scan_premium": "Smart Scan (Premium)",
+    "ai_reading": "AI Reading Receipt...",
+    "type_expense": "EXPENSE",
+    "type_income": "INCOME",
+    "nominal_label": "AMOUNT (RP)",
+    "wallet_label": "Wallet",
+    "category_label": "Category",
+    "date_label": "Date",
+    "note_label": "Note",
+    "note_placeholder": "Morning coffee...",
+    "cancel_btn": "CANCEL",
+    "saving_btn": "SAVING...",
+    "save_btn": "SAVE TRANSACTION",
+    "toast_connecting": "Connecting to Zenith AI Engine...",
+    "toast_analyzing": "Analyzing Photo Pixels & OCR...",
+    "toast_success": "Success! Zenith AI verified: Rp {amount}",
+    "toast_error": "Failed to process receipt. Try again with a clearer photo.",
+    "toast_premium_only": "AI Smart Scan is only available for Zenith Premium accounts.",
+    "toast_offline": "Saved Offline! Waiting for connection..."
   },
   "settings": {
     "title": "Settings",
@@ -103,7 +131,17 @@
     "push_notifications": "Push Notifications",
     "push_desc": "Direct notifications to mobile",
     "email_reports": "Regular Email Reports",
-    "email_desc": "Monthly regular financial recap"
+    "email_desc": "Monthly regular financial recap",
+    "toast_biometric_success": "Biometric successfully registered to your device!",
+    "toast_biometric_cancelled": "Biometric registration cancelled by user.",
+    "toast_biometric_unavailable": "Your device does not have FaceID/TouchID set up.",
+    "toast_push_unsupported": "Browser does not support push notifications.",
+    "toast_notif_body": "Configuration connected. Our real-time portfolio monitoring will now notify you directly through the OS.",
+    "toast_push_enabled": "OS Push Notifications enabled!",
+    "toast_notif_denied": "Notification permission denied by browser.",
+    "toast_email_success": "Successfully registered! Our AI will start drafting reviews next week.",
+    "toast_lang_updated": "Language updated to English (USD)",
+    "toast_pwd_limit": "Update Limit! Please wait {days} more days."
   },
   "budgets": {
     "title": "Expense Items",
