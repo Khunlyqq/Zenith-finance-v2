@@ -71,7 +71,7 @@ export function OfflineSyncManager() {
 
   // v2.1.4 - Master branch sync deployment
   useEffect(() => {
-    const CURRENT_VERSION = "2.3.0";
+    const CURRENT_VERSION = "2.3.1";
     const storedVersion = localStorage.getItem("ZENITH_APP_VERSION");
 
     if (storedVersion !== CURRENT_VERSION) {
