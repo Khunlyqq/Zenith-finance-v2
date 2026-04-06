@@ -11,6 +11,7 @@ import { X, Plus, Wallet, Tag, Calendar, PenLine, Sparkles, Camera, Loader2, Loc
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useLanguage } from "@/components/providers/LanguageProvider";
+import { extractReceiptData } from "@/lib/utils/ocr";
 
 export default function TransactionModal() {
   const { isTransactionModalOpen, closeTransactionModal } = useModal();
@@ -73,66 +74,44 @@ export default function TransactionModal() {
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setFetchingScan(true);
-    const fileName = file.name.toLowerCase();
     
-    // Intelligent Keyword Recognition
-    let detectedCategory = "General";
-    let detectedAmount = 0;
-    let vendorName = "";
-
-    if (fileName.includes("makan") || fileName.includes("resto") || fileName.includes("food") || fileName.includes("starbuck") || fileName.includes("kopi")) {
-      detectedCategory = lang === 'id' ? "Makanan & Minuman" : "Food & Bev";
-      detectedAmount = Math.floor(Math.random() * (150 - 45 + 1) + 45) * 1000 + (Math.random() > 0.5 ? 500 : 0);
-      vendorName = fileName.includes("starbuck") ? "Starbucks" : "Restoran";
-    } else if (fileName.includes("grab") || fileName.includes("gojek") || fileName.includes("transport") || fileName.includes("ojek") || fileName.includes("uber")) {
-      detectedCategory = lang === 'id' ? "Transportasi" : "Transport";
-      detectedAmount = Math.floor(Math.random() * (85 - 12 + 1) + 12) * 1000 + (Math.random() > 0.5 ? 500 : 0);
-      vendorName = fileName.includes("grab") ? "Grab" : (fileName.includes("gojek") ? "Gojek" : "Transport");
-    } else if (fileName.includes("listrik") || fileName.includes("pln") || fileName.includes("air") || fileName.includes("pdam") || fileName.includes("wifi") || fileName.includes("internet")) {
-      detectedCategory = lang === 'id' ? "Tagihan" : "Bills";
-      detectedAmount = Math.floor(Math.random() * (850 - 150 + 1) + 150) * 1000;
-      vendorName = fileName.includes("pln") ? "PLN" : (fileName.includes("pdam") ? "PDAM" : "Utility");
-    } else if (fileName.includes("belanja") || fileName.includes("indo") || fileName.includes("alfa") || fileName.includes("market") || fileName.includes("shop")) {
-      detectedCategory = lang === 'id' ? "Belanja" : "Shopping";
-      detectedAmount = Math.floor(Math.random() * (450 - 35 + 1) + 35) * 1000 + (Math.random() > 0.5 ? 200 : 800);
-      vendorName = fileName.includes("indo") ? "Indomaret" : (fileName.includes("alfa") ? "Alfamart" : "Market");
-    } else {
-      detectedAmount = Math.floor(Math.random() * (250 - 50 + 1) + 50) * 1000;
-      vendorName = "General Receipt";
-    }
-
     // AI Step 1: Connectivity
-    toast.info(lang === 'id' ? "Menghubungkan ke Mesin AI Zenith..." : "Connecting to Zenith AI Engine...", { duration: 1500 });
+    const processingToast = toast.loading(lang === 'id' ? "Menghubungkan ke Mesin AI Zenith..." : "Connecting to Zenith AI Engine...");
     
-    setTimeout(() => {
-      // AI Step 2: Recognition
-      toast.info(lang === 'id' ? `Mendeteksi Vendor: ${vendorName}...` : `Detecting Vendor: ${vendorName}...`, { duration: 2000 });
+    try {
+      // AI Step 2: OCR Analysis
+      toast.loading(lang === 'id' ? "Menganalisis Piksel Foto & OCR..." : "Analyzing Photo Pixels & OCR...", { id: processingToast });
       
-      setTimeout(() => {
-        // AI Step 3: Calculation
-        toast.info(lang === 'id' ? `Ekstraksi Total Bayar & Kategori (${detectedCategory})...` : `Extracting Amount & Category (${detectedCategory})...`, { duration: 2000 });
-        
-        setTimeout(() => {
-          // Final Result
-          setValue("amount", detectedAmount);
-          setValue("note", lang === 'id' ? `${vendorName} (${file.name})` : `${vendorName} (${file.name})`);
-          setValue("type", "expense");
-          
-          toast.success(lang === 'id' ? `Selesai! AI Zenith berhasil validasi: Rp ${new Intl.NumberFormat('id-ID').format(detectedAmount)}` : `Finished! Zenith AI verified: Rp ${new Intl.NumberFormat('id-ID').format(detectedAmount)}`, { 
-            icon: <Sparkles size={16} className="text-[#ffb870]"/>,
-            duration: 4000
-          });
-          
-          setFetchingScan(false);
-          if (fileInputRef.current) fileInputRef.current.value = '';
-        }, 1500);
-      }, 1500);
-    }, 1000);
+      const result = await extractReceiptData(file);
+      
+      // Final Result
+      setValue("amount", result.amount);
+      setValue("note", `${result.note} (${file.name})`);
+      setValue("type", "expense");
+      
+      // Attempt to auto-select category if we have a match
+      if (result.category) {
+        const cat = categories.find(c => t(`nav.${c.name.toLowerCase()}`).toLowerCase().includes(result.category!.toLowerCase()) || c.name.toLowerCase().includes(result.category!.toLowerCase()));
+        if (cat) setValue("category_id", cat.id);
+      }
+
+      toast.success(lang === 'id' ? `Berhasil! AI Zenith validasi: Rp ${new Intl.NumberFormat('id-ID').format(result.amount)}` : `Finished! Zenith AI verified: Rp ${new Intl.NumberFormat('id-ID').format(result.amount)}`, { 
+        id: processingToast,
+        icon: <Sparkles size={16} className="text-[#ffb870]"/>,
+        duration: 5000
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error(lang === 'id' ? "Gagal memproses struk. Coba lagi dengan foto yang lebih jelas." : "Failed to process receipt. Try again with a clearer photo.", { id: processingToast });
+    } finally {
+      setFetchingScan(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleSmartScan = () => {

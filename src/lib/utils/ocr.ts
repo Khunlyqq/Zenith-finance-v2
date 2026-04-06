@@ -1,0 +1,95 @@
+import { createWorker } from 'tesseract.js';
+
+export interface ScanResult {
+  amount: number;
+  note: string;
+  category?: string;
+  confidence: number;
+}
+
+/**
+ * Clean strings for amount parsing: 125.000 -> 125000, Rp45,000 -> 45000
+ */
+const parseCurrencyString = (str: string): number => {
+  // Remove non-numeric characters except for dots and commas
+  const clean = str.replace(/[^\d.,]/g, '');
+  
+  // Handle Indonesian formatting: 125.000,00 or 125.000
+  // If it's a dot for thousand and comma for decimal
+  if (clean.includes('.') && clean.includes(',')) {
+    return parseFloat(clean.replace(/\./g, '').replace(',', '.'));
+  }
+  
+  // If it's just dots (125.000)
+  if (clean.includes('.') && !clean.includes(',')) {
+    // Check if the last part after dot is 3 digits (Indonesian thousand sep)
+    const parts = clean.split('.');
+    if (parts[parts.length - 1].length === 3) {
+      return parseFloat(clean.replace(/\./g, ''));
+    }
+    return parseFloat(clean);
+  }
+
+  // If it's just commas (45,000)
+  if (clean.includes(',') && !clean.includes('.')) {
+    return parseFloat(clean.replace(/,/g, ''));
+  }
+
+  return parseFloat(clean) || 0;
+};
+
+export const extractReceiptData = async (file: File): Promise<ScanResult> => {
+  const worker = await createWorker('ind+eng'); // Support ID and EN
+  
+  try {
+    const { data: { text } } = await worker.recognize(file);
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+    // 1. Identify Vendor (First few lines that aren't purely numeric)
+    let vendor = "Struk Belanja";
+    for (let i = 0; i < Math.min(lines.length, 5); i++) {
+      if (lines[i].length > 3 && !/^\d+$/.test(lines[i])) {
+        vendor = lines[i];
+        break;
+      }
+    }
+
+    // 2. Identify Total Amount (Find largest currency-like number)
+    // Regex for numbers like: 125.000, Rp 45,000, 1.250.000
+    const currencyRegex = /(?:rp|total|bayar)?\s?(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,2})?)/gi;
+    let maxAmount = 0;
+    
+    const matches = text.matchAll(currencyRegex);
+    for (const match of matches) {
+      const val = parseCurrencyString(match[1]);
+      if (val > maxAmount && val < 10000000) { // Limit to 10M to avoid outliers like dates or account numbers
+        maxAmount = val;
+      }
+    }
+
+    // 3. Infer Category
+    let category = "General";
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('makan') || lowerText.includes('food') || lowerText.includes('resto') || lowerText.includes('kopi') || lowerText.includes('cafe')) {
+      category = "Makanan & Minuman";
+    } else if (lowerText.includes('grab') || lowerText.includes('gojek') || lowerText.includes('ojek') || lowerText.includes('trans') || lowerText.includes('taxi')) {
+      category = "Transportasi";
+    } else if (lowerText.includes('pln') || lowerText.includes('listrik') || lowerText.includes('air') || lowerText.includes('internet') || lowerText.includes('wifi')) {
+      category = "Tagihan";
+    } else if (lowerText.includes('indo') || lowerText.includes('alfa') || lowerText.includes('market') || lowerText.includes('belanja') || lowerText.includes('shop')) {
+      category = "Belanja";
+    }
+
+    return {
+      amount: maxAmount || 50000, // Fallback if no amount detected
+      note: vendor,
+      category,
+      confidence: text.length > 20 ? 0.8 : 0.4
+    };
+  } catch (error) {
+    console.error("OCR Error:", error);
+    throw error;
+  } finally {
+    await worker.terminate();
+  }
+};
