@@ -136,7 +136,7 @@ export default function Header({
                       className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-[#899295] hover:text-[#86d2e5] hover:bg-[#86d2e5]/5 rounded-xl transition-all group uppercase tracking-widest"
                     >
                       <User size={16} className="group-hover:scale-110 transition-transform" />
-                      <span>{t("nav.profil")}</span>
+                      <span>{t("nav.profile")}</span>
                     </Link>
                     <Link 
                       href="/pengaturan"
@@ -144,7 +144,7 @@ export default function Header({
                       className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-[#899295] hover:text-[#86d2e5] hover:bg-[#86d2e5]/5 rounded-xl transition-all group uppercase tracking-widest"
                     >
                       <Settings size={16} className="group-hover:scale-110 transition-transform" />
-                      <span>{t("nav.pengaturan")}</span>
+                      <span>{t("nav.settings")}</span>
                     </Link>
                     <div className="h-px bg-white/5 my-2 mx-2"></div>
                     <button 
@@ -152,7 +152,7 @@ export default function Header({
                       className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-[#ffb4ab] hover:bg-[#ffb4ab]/5 rounded-xl transition-all group uppercase tracking-widest"
                     >
                       <LogOut size={16} className="group-hover:scale-110 transition-transform" />
-                      <span>{t("nav.keluar")}</span>
+                      <span>{t("nav.logout")}</span>
                     </button>
                   </div>
                 </div>

@@ -57,7 +57,7 @@ export default function MobileFab() {
   const isLaporan = pathname === "/laporan";
 
   return (
-    <div className="fixed bottom-24 right-6 z-50 md:hidden animate-in fade-in zoom-in slide-in-from-bottom-10 duration-700">
+    <div className="fixed bottom-24 right-6 z-50 md:hidden">
       <button
         onClick={handleAction}
         className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#86d2e5] to-[#006778] text-[#101415] shadow-[0_12px_40px_rgba(134,210,229,0.5)] active:scale-90 hover:scale-105 transition-all duration-300 premium-glow border border-white/20"

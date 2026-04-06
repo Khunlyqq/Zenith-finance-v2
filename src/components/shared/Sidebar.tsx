@@ -24,10 +24,10 @@ export default function Sidebar() {
 
   const navItems = [
     { name: t("nav.dashboard"), href: "/dashboard", icon: "dashboard" },
-    { name: t("nav.transaksi"), href: "/transaksi", icon: "receipt_long" },
-    { name: t("nav.anggaran"), href: "/anggaran", icon: "account_balance_wallet" },
-    { name: t("nav.tabungan"), href: "/tabungan", icon: "savings" },
-    { name: t("nav.laporan"), href: "/laporan", icon: "analytics" },
+    { name: t("nav.transactions"), href: "/transaksi", icon: "receipt_long" },
+    { name: t("nav.budgets"), href: "/anggaran", icon: "account_balance_wallet" },
+    { name: t("nav.savings"), href: "/tabungan", icon: "savings" },
+    { name: t("nav.reports"), href: "/laporan", icon: "analytics" },
   ];
 
   return (
