@@ -57,12 +57,12 @@ export default function MobileFab() {
   const isLaporan = pathname === "/laporan";
 
   return (
-    <div className="fixed bottom-24 right-6 z-50 md:hidden animate-in fade-in slide-in-from-bottom-5 duration-500">
+    <div className="fixed bottom-24 right-6 z-50 md:hidden animate-in fade-in zoom-in slide-in-from-bottom-10 duration-700">
       <button
         onClick={handleAction}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#86d2e5] to-[#006778] text-[#101415] shadow-[0_8px_30px_rgb(134,210,229,0.4)] active:scale-90 transition-transform premium-glow"
+        className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#86d2e5] to-[#006778] text-[#101415] shadow-[0_12px_40px_rgba(134,210,229,0.5)] active:scale-90 hover:scale-105 transition-all duration-300 premium-glow border border-white/20"
       >
-        {isLaporan ? <FileDown size={24} /> : <PlusCircle size={24} />}
+        {isLaporan ? <FileDown size={28} /> : <PlusCircle size={28} />}
       </button>
     </div>
   );

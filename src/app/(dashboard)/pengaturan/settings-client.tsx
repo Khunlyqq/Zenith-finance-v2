@@ -10,24 +10,22 @@ import {
   Fingerprint,
   Mail,
   Moon,
-  User,
-  Loader2,
-  CheckCircle2,
-  Award
+  Loader2
 } from "lucide-react";
 import { useState } from "react";
-import { updateProfileName, togglePremiumStatus, updatePreferences } from "@/actions/profile";
+import { updatePreferences } from "@/actions/profile";
 import { requestPasswordReset } from "@/actions/auth";
 import { toast } from "sonner";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function SettingsClient({ profile, user }: any) {
+  const { t, lang, setLang } = useLanguage();
   const prefs = user?.user_metadata?.preferences || {};
 
   const [pushNotif, setPushNotif] = useState(prefs.pushNotif ?? true);
   const [emailNotif, setEmailNotif] = useState(prefs.emailNotif ?? false);
   const [biometric, setBiometric] = useState(prefs.biometric ?? true);
   const [darkMode, setDarkMode] = useState(prefs.darkMode ?? true); 
-  const [isEnglish, setIsEnglish] = useState(prefs.isEnglish ?? false);
   const [resettingPwd, setResettingPwd] = useState(false);
   const [showConfirmPwd, setShowConfirmPwd] = useState(false);
 
@@ -56,38 +54,37 @@ export default function SettingsClient({ profile, user }: any) {
               timeout: 60000
             }
           });
-          toast.success("Biometrik berhasil dipindai ke perangkat Anda!");
+          toast.success(lang === 'id' ? "Biometrik berhasil dipindai ke perangkat Anda!" : "Biometrics successfully scanned to your device!");
         } catch(e: any) {
           if(e.name === 'NotAllowedError') {
-             toast.error("Registrasi biometrik dibatalkan pengguna.");
+             toast.error(lang === 'id' ? "Registrasi biometrik dibatalkan pengguna." : "Biometric registration cancelled by user.");
           } else {
-             toast.error("Perangkat Anda tidak menyetel FaceID/TouchID.");
+             toast.error(lang === 'id' ? "Perangkat Anda tidak menyetel FaceID/TouchID." : "Your device doesn't have FaceID/TouchID set up.");
           }
           finalValue = currentValue;
         }
       } 
       else if (key === 'pushNotif' && newValue) {
         if (!("Notification" in window)) {
-          toast.error("Browser tidak mendukung notifikasi push.");
+          toast.error(lang === 'id' ? "Browser tidak mendukung notifikasi push." : "Browser does not support push notifications.");
           finalValue = currentValue;
         } else {
           const permission = await Notification.requestPermission();
           if (permission === "granted") {
-            new Notification("Zenith Keuangan Mapan", {
-              body: "Konfigurasi terhubung. Pemantauan portofolio waktu nyata kami sekarang akan lansung mengabarimu melalui OS ketika ada pergerakan tidak wajar.",
+            new Notification(lang === 'id' ? "Zenith Keuangan Mapan" : "Zenith Finance Ready", {
+              body: lang === 'id' 
+                ? "Konfigurasi terhubung. Pemantauan portofolio waktu nyata kami sekarang akan lansung mengabarimu melalui OS ketika ada pergerakan tidak wajar."
+                : "Configuration connected. Our real-time portfolio monitoring will now notify you directly through the OS when unusual movements occur.",
             });
-            toast.success("Push Notifikasi OS diaktifkan!");
+            toast.success(lang === 'id' ? "Push Notifikasi OS diaktifkan!" : "OS Push Notifications enabled!");
           } else {
-            toast.error("Izin Notifikasi ditahan oleh browser.");
+            toast.error(lang === 'id' ? "Izin Notifikasi ditahan oleh browser." : "Notification permission denied by browser.");
             finalValue = currentValue;
           }
         }
       }
       else if (key === 'emailNotif' && newValue) {
-        toast.success("Sukses mendaftar! AI kami akan memulai draf ulasan transaksi kesurel Anda minggu depan.");
-      }
-      else if (key === 'isEnglish') {
-        toast.success(newValue ? "Language updated to English (USD)" : "Bahasa diubah ke Indonesia (IDR)");
+        toast.success(lang === 'id' ? "Sukses mendaftar! AI kami akan memulai draf ulasan transaksi kesurel Anda minggu depan." : "Successfully registered! Our AI will start drafting transaction reviews to your email next week.");
       }
     } catch(err) {
       console.error(err);
@@ -97,9 +94,15 @@ export default function SettingsClient({ profile, user }: any) {
     await updatePreferences(key, finalValue);
   };
 
+  const handleLanguageToggle = async () => {
+    const newLang = lang === 'en' ? 'id' : 'en';
+    await setLang(newLang);
+    toast.success(newLang === 'en' ? "Language updated to English (USD)" : "Bahasa diubah ke Indonesia (IDR)");
+  };
+
   const handleResetPassword = async () => {
     if(!canResetPwd) {
-      toast.error(`Batas waktu pembaruan! Silakan tunggu ${daysLeftToReset} hari lagi.`);
+      toast.error(lang === 'id' ? `Batas waktu pembaruan! Silakan tunggu ${daysLeftToReset} hari lagi.` : `Update limit! Please wait ${daysLeftToReset} more days.`);
       return;
     }
     
@@ -118,8 +121,8 @@ export default function SettingsClient({ profile, user }: any) {
   return (
     <div className="space-y-12 pb-12 px-2 max-w-5xl mx-auto">
       <div className="flex flex-col gap-2 relative">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#e0e3e4]">Pengaturan</h2>
-        <p className="text-[#899295] text-sm md:text-base font-medium">Konfigurasi preferensi sistem dan fitur keamanan akun Anda.</p>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#e0e3e4]">{t("settings.title")}</h2>
+        <p className="text-[#899295] text-sm md:text-base font-medium">{t("settings.desc")}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
@@ -131,8 +134,8 @@ export default function SettingsClient({ profile, user }: any) {
                <Palette size={24} />
              </div>
              <div>
-               <h3 className="text-2xl font-black font-headline text-[#e0e3e4]">Tampilan Visual</h3>
-               <p className="text-[10px] text-[#86d2e5] uppercase tracking-[0.2em] font-black mt-1">Estetika & Lokalisasi</p>
+               <h3 className="text-2xl font-black font-headline text-[#e0e3e4]">{t("settings.visual_title")}</h3>
+               <p className="text-[10px] text-[#86d2e5] uppercase tracking-[0.2em] font-black mt-1">{t("settings.visual_subtitle")}</p>
              </div>
           </div>
 
@@ -143,8 +146,8 @@ export default function SettingsClient({ profile, user }: any) {
                      <Moon size={24} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-[#e0e3e4]">Mode Gelap (Zenith)</h4>
-                    <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">Diaktifkan oleh sistem</p>
+                    <h4 className="font-bold text-base text-[#e0e3e4]">{t("settings.dark_mode")}</h4>
+                    <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">{t("settings.dark_mode_desc")}</p>
                   </div>
                </div>
                <button 
@@ -161,14 +164,14 @@ export default function SettingsClient({ profile, user }: any) {
                      <Globe size={24} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-[#e0e3e4]">Wilayah & Bahasa</h4>
-                    <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">{isEnglish ? 'English (USD)' : 'Indonesia (IDR)'}</p>
+                    <h4 className="font-bold text-base text-[#e0e3e4]">{t("settings.lang_region")}</h4>
+                    <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">{lang === 'en' ? 'English (USD)' : 'Indonesia (IDR)'}</p>
                   </div>
                </div>
                <button 
-                  onClick={() => handleTogglePref("isEnglish", isEnglish, setIsEnglish)}
+                  onClick={handleLanguageToggle}
                   className="text-[#86d2e5] font-black text-[10px] uppercase tracking-widest py-3 px-5 rounded-xl bg-[#86d2e5]/10 hover:bg-[#86d2e5]/20 transition-all">
-                  UBAH
+                  {t("settings.change")}
                </button>
              </div>
           </div>
@@ -181,8 +184,8 @@ export default function SettingsClient({ profile, user }: any) {
                <Shield size={24} />
              </div>
              <div>
-               <h3 className="text-2xl font-black font-headline text-[#e0e3e4]">Keamanan Privasi</h3>
-               <p className="text-[10px] text-[#78dc77] uppercase tracking-[0.2em] font-black mt-1">Otentikasi Akun</p>
+               <h3 className="text-2xl font-black font-headline text-[#e0e3e4]">{t("settings.security_title")}</h3>
+               <p className="text-[10px] text-[#78dc77] uppercase tracking-[0.2em] font-black mt-1">{t("settings.security_subtitle")}</p>
              </div>
           </div>
 
@@ -193,33 +196,33 @@ export default function SettingsClient({ profile, user }: any) {
                      <KeyRound size={24} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-[#e0e3e4]">Kata Sandi</h4>
+                    <h4 className="font-bold text-base text-[#e0e3e4]">{t("settings.password")}</h4>
                     <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">
-                      {lastPwdReset ? `Terakhir diubah ${daysSinceReset} hari lalu` : 'Belum pernah diubah'}
+                      {lastPwdReset ? `${t("settings.last_changed")} ${daysSinceReset} ${t("settings.days_ago")}` : t("settings.never_changed")}
                     </p>
                   </div>
                </div>
                {!showConfirmPwd ? (
                  <button 
                     onClick={() => {
-                       if(!canResetPwd) toast.error(`Batas waktu! Silakan tunggu ${daysLeftToReset} hari lagi.`);
+                       if(!canResetPwd) toast.error(lang === 'id' ? `Batas waktu! Silakan tunggu ${daysLeftToReset} hari lagi.` : `Timeout! Please wait ${daysLeftToReset} more days.`);
                        else setShowConfirmPwd(true);
                     }}
                     className="w-full relative flex items-center justify-center gap-2 bg-[#323537]/50 hover:bg-[#78dc77]/10 text-[#899295] hover:text-[#78dc77] py-5 rounded-2xl text-[10px] uppercase font-black tracking-widest transition-all">
-                    Perbarui Sandi
+                    {t("settings.update_password")}
                  </button>
                ) : (
                  <div className="flex gap-2 w-full animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <button 
                        onClick={() => setShowConfirmPwd(false)}
                        className="flex-1 bg-transparent border border-[#899295]/20 hover:bg-[#323537] text-[#899295] py-4 rounded-2xl text-[10px] uppercase font-black tracking-widest transition-all disabled:opacity-50">
-                       Batal
+                       {t("settings.cancel")}
                     </button>
                     <button 
                        onClick={handleResetPassword}
                        disabled={resettingPwd}
                        className="flex-1 relative flex items-center justify-center gap-2 bg-[#78dc77]/20 hover:bg-[#78dc77] text-[#78dc77] hover:text-[#101415] py-4 rounded-2xl text-[10px] uppercase font-black tracking-widest transition-all disabled:opacity-50">
-                       {resettingPwd ? <Loader2 size={16} className="animate-spin" /> : "Ya, Kirim Email"}
+                       {resettingPwd ? <Loader2 size={16} className="animate-spin" /> : t("settings.confirm_send")}
                     </button>
                  </div>
                )}
@@ -232,8 +235,8 @@ export default function SettingsClient({ profile, user }: any) {
                        <Fingerprint size={24} />
                     </div>
                     <div>
-                      <h4 className="font-bold text-base text-[#e0e3e4]">Biometrik Login</h4>
-                      <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">Gunakan FaceID/TouchID</p>
+                      <h4 className="font-bold text-base text-[#e0e3e4]">{t("settings.biometric")}</h4>
+                      <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">{t("settings.biometric_desc")}</p>
                     </div>
                   </div>
                   <button 
@@ -245,7 +248,7 @@ export default function SettingsClient({ profile, user }: any) {
                </div>
                <div className="bg-[#78dc77]/5 border border-[#78dc77]/20 p-5 rounded-2xl mt-auto">
                  <p className="text-[10px] font-bold text-[#78dc77] leading-relaxed uppercase tracking-wider">
-                   Biometrik aktif. Perangkat ini akan menggunakan sensor otentikasi lokal untuk masuk tanpa sandi.
+                   {t("settings.biometric_active")}
                  </p>
                </div>
              </div>
@@ -259,8 +262,8 @@ export default function SettingsClient({ profile, user }: any) {
                <Bell size={24} />
              </div>
              <div>
-               <h3 className="text-2xl font-black font-headline text-[#e0e3e4]">Notifikasi Platform</h3>
-               <p className="text-[10px] text-[#ffb870] uppercase tracking-[0.2em] font-black mt-1">Informasi Waktu Nyata</p>
+               <h3 className="text-2xl font-black font-headline text-[#e0e3e4]">{t("settings.notifications")}</h3>
+               <p className="text-[10px] text-[#ffb870] uppercase tracking-[0.2em] font-black mt-1">{t("settings.notifications_subtitle")}</p>
              </div>
           </div>
 
@@ -271,8 +274,8 @@ export default function SettingsClient({ profile, user }: any) {
                      <Smartphone size={24} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-[#e0e3e4]">Push Notification</h4>
-                    <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">Notifikasi langsung ke handphone</p>
+                    <h4 className="font-bold text-base text-[#e0e3e4]">{t("settings.push_notifications")}</h4>
+                    <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">{t("settings.push_desc")}</p>
                   </div>
                 </div>
                 <button 
@@ -289,8 +292,8 @@ export default function SettingsClient({ profile, user }: any) {
                      <Mail size={24} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-[#e0e3e4]">Laporan Surel Berkala</h4>
-                    <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">Rekap finansial reguler bulanan</p>
+                    <h4 className="font-bold text-base text-[#e0e3e4]">{t("settings.email_reports")}</h4>
+                    <p className="text-[10px] text-[#899295] uppercase tracking-widest mt-1">{t("settings.email_desc")}</p>
                   </div>
                 </div>
                 <button 

@@ -3,9 +3,9 @@
 import { Bell, Sparkles, TrendingUp, TrendingDown, Wallet, Settings, User, LogOut, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
-// import { logout } from "../../actions/auth";
-const logout = async () => { console.log("Logout triggered"); window.location.href = "/login"; };
+import { useLanguage } from "@/components/providers/LanguageProvider"; // [NEW]
 
+const logout = async () => { console.log("Logout triggered"); window.location.href = "/login"; };
 
 export default function Header({ 
   userProfile,
@@ -16,25 +16,28 @@ export default function Header({
 }) {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { t, lang } = useLanguage(); // [NEW]
 
   async function handleLogout() {
     await logout();
   }
 
   // Format notifications from real transactions
-  const formattedNotifications = notifications.map((notif, idx) => ({
-    id: notif.id,
-    title: notif.type === 'income' ? 'Pemasukan Baru' : 'Pengeluaran Baru',
-    desc: `${notif.note || (notif.categories?.name + ' (Kategori)')}: Rp ${new Intl.NumberFormat('id-ID').format(Math.abs(notif.amount))}`,
-    time: new Date(notif.created_at).toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' }),
-    icon: notif.type === 'income' ? <TrendingUp size={14} className="text-[#78dc77]" /> : <TrendingDown size={14} className="text-[#ffb4ab]" />,
-    color: notif.type === 'income' ? 'bg-[#78dc77]/10' : 'bg-[#ffb4ab]/10'
-  }));
+  const formattedNotifications = notifications.map((notif: any) => {
+    const locale = lang === "id" ? "id-ID" : "en-US";
+    return {
+      id: notif.id,
+      title: notif.type === 'income' ? (lang === 'id' ? 'Pemasukan Baru' : 'New Income') : (lang === 'id' ? 'Pengeluaran Baru' : 'New Expense'),
+      desc: `${notif.note || (notif.categories?.name + (lang === "id" ? ' (Kategori)' : ' (Category)'))}: Rp ${new Intl.NumberFormat(locale).format(Math.abs(notif.amount))}`,
+      time: new Date(notif.created_at).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
+      icon: notif.type === 'income' ? <TrendingUp size={14} className="text-[#78dc77]" /> : <TrendingDown size={14} className="text-[#ffb4ab]" />,
+      color: notif.type === 'income' ? 'bg-[#78dc77]/10' : 'bg-[#ffb4ab]/10'
+    };
+  });
 
   return (
     <header className="fixed top-0 right-0 md:left-72 left-0 h-20 z-40 bg-[#101415]/60 backdrop-blur-2xl font-headline font-medium border-b border-white/5 transition-all duration-300">
       <div className="flex justify-between items-center px-4 md:px-10 h-full">
-        {/* Removed Title Section */}
         <div className="flex-1"></div>
 
         <div className="flex items-center gap-6">
@@ -59,7 +62,7 @@ export default function Header({
                 <div className="fixed inset-0 z-0" onClick={() => setIsNotifOpen(false)} />
                 <div className="absolute right-0 mt-4 w-80 bg-[#181c1d] border border-white/5 rounded-[2rem] shadow-2xl p-6 animate-in fade-in slide-in-from-top-2 duration-200 z-50 premium-glow">
                   <div className="flex items-center justify-between mb-6">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-[#899295]">Aktivitas Terbaru</h4>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-[#899295]">{lang === "id" ? "Aktivitas Terbaru" : "Recent Activity"}</h4>
                     <span className="bg-[#86d2e5]/10 text-[#86d2e5] text-[10px] font-black px-2 py-0.5 rounded-full uppercase">Live</span>
                   </div>
                   
@@ -76,12 +79,12 @@ export default function Header({
                         </div>
                       </div>
                     )) : (
-                      <p className="text-[10px] text-[#899295] text-center py-4 uppercase tracking-widest font-black">Belum ada aktivitas</p>
+                      <p className="text-[10px] text-[#899295] text-center py-4 uppercase tracking-widest font-black">{t("common.no_data")}</p>
                     )}
                   </div>
 
                   <button className="w-full mt-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#86d2e5] border border-[#86d2e5]/20 rounded-xl hover:bg-[#86d2e5]/10 transition-all">
-                    Lihat Semua Aktivitas
+                    {lang === "id" ? "Lihat Semua Aktivitas" : "See All Activity"}
                   </button>
                 </div>
               </>
@@ -103,10 +106,10 @@ export default function Header({
                 src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=150&auto=format&fit=crop"
               />
               <div className="text-right hidden sm:block">
-                <p className="text-xs font-black text-[#e0e3e4] line-clamp-1">{userProfile?.full_name || 'User Profile'}</p>
+                <p className="text-xs font-black text-[#e0e3e4] line-clamp-1">{userProfile?.full_name || (lang === 'id' ? 'Pengguna' : 'User')}</p>
                 <div className="flex items-center gap-1.5 justify-end">
                    <p className="text-[9px] text-[#899295] uppercase tracking-widest font-black">
-                    {userProfile?.is_premium ? 'Premium' : 'Standard'}
+                    {userProfile?.is_premium ? t("common.premium") : t("common.standard")}
                   </p>
                   <ChevronDown size={10} className={`text-[#899295] transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
                 </div>
@@ -125,7 +128,7 @@ export default function Header({
                       className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-[#899295] hover:text-[#86d2e5] hover:bg-[#86d2e5]/5 rounded-xl transition-all group uppercase tracking-widest"
                     >
                       <User size={16} className="group-hover:scale-110 transition-transform" />
-                      <span>Profil Saya</span>
+                      <span>{t("nav.profil")}</span>
                     </Link>
                     <Link 
                       href="/pengaturan"
@@ -133,7 +136,7 @@ export default function Header({
                       className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-[#899295] hover:text-[#86d2e5] hover:bg-[#86d2e5]/5 rounded-xl transition-all group uppercase tracking-widest"
                     >
                       <Settings size={16} className="group-hover:scale-110 transition-transform" />
-                      <span>Pengaturan</span>
+                      <span>{t("nav.pengaturan")}</span>
                     </Link>
                     <div className="h-px bg-white/5 my-2 mx-2"></div>
                     <button 
@@ -141,7 +144,7 @@ export default function Header({
                       className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-[#ffb4ab] hover:bg-[#ffb4ab]/5 rounded-xl transition-all group uppercase tracking-widest"
                     >
                       <LogOut size={16} className="group-hover:scale-110 transition-transform" />
-                      <span>Keluar Akun</span>
+                      <span>{t("nav.keluar")}</span>
                     </button>
                   </div>
                 </div>

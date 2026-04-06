@@ -18,7 +18,7 @@ export default function TransactionModal() {
   const [loading, setLoading] = useState(false);
   const [fetchingScan, setFetchingScan] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isPremium, setIsPremium] = useState(false);
+  const [isPremium, setIsPremium] = useState(true); // Premium for All (v2.3.3)
 
   const supabase = createClient();
 
@@ -62,8 +62,10 @@ export default function TransactionModal() {
     }
     
     if (userRes.data?.user) {
-      const { data: profile } = await supabase.from('profiles').select('is_premium').eq('id', userRes.data.user.id).single();
-      setIsPremium(profile?.is_premium || false);
+      // Premium for All bypass (v2.3.3)
+      // const { data: profile } = await supabase.from('profiles').select('is_premium').eq('id', userRes.data.user.id).single();
+      // setIsPremium(profile?.is_premium || false);
+      setIsPremium(true);
     }
   }
 

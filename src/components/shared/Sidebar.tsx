@@ -14,27 +14,28 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { downloadCSV } from "@/lib/utils/export";
 import { toast } from "sonner";
-
-const navItems = [
-  { name: "Dashboard", href: "/dashboard", icon: "dashboard" },
-  { name: "Transaksi", href: "/transaksi", icon: "receipt_long" },
-  { name: "Anggaran", href: "/anggaran", icon: "account_balance_wallet" },
-  { name: "Tabungan", href: "/tabungan", icon: "savings" },
-  { name: "Laporan", href: "/laporan", icon: "analytics" },
-];
-
 import { useModal } from "@/components/providers/ModalProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { openTransactionModal, openWalletModal, openBudgetModal, openSavingsModal } = useModal();
+  const { t, lang } = useLanguage();
+
+  const navItems = [
+    { name: t("nav.dashboard"), href: "/dashboard", icon: "dashboard" },
+    { name: t("nav.transaksi"), href: "/transaksi", icon: "receipt_long" },
+    { name: t("nav.anggaran"), href: "/anggaran", icon: "account_balance_wallet" },
+    { name: t("nav.tabungan"), href: "/tabungan", icon: "savings" },
+    { name: t("nav.laporan"), href: "/laporan", icon: "analytics" },
+  ];
 
   return (
     <aside className="h-screen fixed left-0 top-0 w-72 hidden md:flex flex-col bg-[#101415] font-['Plus_Jakarta_Sans'] antialiased tracking-tight shadow-[32px_0_32px_-4px_rgba(0,0,0,0.06)] z-50">
       <div className="flex flex-col h-full p-6 space-y-2">
         {/* Brand */}
         <div className="mb-10 px-4">
-          <h1 className="text-2xl font-bold tracking-tighter text-[#86d2e5]">Dompetku</h1>
+          <h1 className="text-2xl font-bold tracking-tighter text-[#86d2e5]">Zenith</h1>
           <p className="text-xs text-[#899295] font-medium tracking-widest uppercase mt-1">THE DIGITAL CURATOR</p>
         </div>
 
@@ -71,7 +72,7 @@ export default function Sidebar() {
             className="group flex items-center justify-center gap-2 bg-[#1c2021] border border-white/5 text-[#899295] hover:text-[#86d2e5] hover:border-[#86d2e5]/30 py-4 px-6 rounded-xl transition-all active:scale-95 text-xs font-black uppercase tracking-widest"
           >
             <Wallet size={18} className="group-hover:scale-110 transition-transform" />
-            <span>Tambah Dompet</span>
+            <span>{t("common.add_wallet")}</span>
           </button>
           <button 
             onClick={async () => {
@@ -87,27 +88,28 @@ export default function Sidebar() {
                   .order("date", { ascending: false });
 
                 if (error) {
-                  toast.error("Gagal mengunduh laporan");
+                  toast.error(lang === "id" ? "Gagal mengunduh laporan" : "Failed to download report");
                   return;
                 }
 
                 if (!data || data.length === 0) {
-                  toast.error("Tidak ada data transaksi untuk diunduh");
+                  toast.error(t("common.no_data"));
                   return;
                 }
 
                 // Flatten data for CSV
-                const flattenedData = data.map(tx => ({
-                  Tanggal: new Date(tx.date).toLocaleDateString("id-ID"),
-                  Catatan: tx.note || "",
-                  Kategori: tx.categories?.name || "",
-                  Dompet: tx.wallets?.name || "",
-                  Tipe: tx.type === "income" ? "Pemasukan" : "Pengeluaran",
-                  Jumlah: tx.amount
+                const locale = lang === "id" ? "id-ID" : "en-US";
+                const flattenedData = data.map((tx: any) => ({
+                  [lang === "id" ? "Tanggal" : "Date"]: new Date(tx.date).toLocaleDateString(locale),
+                  [lang === "id" ? "Catatan" : "Note"]: tx.note || "",
+                  [lang === "id" ? "Kategori" : "Category"]: tx.categories?.name || "",
+                  [lang === "id" ? "Dompet" : "Wallet"]: tx.wallets?.name || "",
+                  [lang === "id" ? "Tipe" : "Type"]: tx.type === "income" ? (lang === "id" ? "Pemasukan" : "Income") : (lang === "id" ? "Pengeluaran" : "Expense"),
+                  [lang === "id" ? "Jumlah" : "Amount"]: tx.amount
                 }));
 
-                downloadCSV(flattenedData, `Laporan_Keuangan_${new Date().toISOString().split('T')[0]}`);
-                toast.success("Laporan berhasil diunduh");
+                downloadCSV(flattenedData, `Zenith_Report_${new Date().toISOString().split('T')[0]}`);
+                toast.success(lang === "id" ? "Laporan berhasil diunduh" : "Report downloaded successfully");
               } else if (pathname === "/anggaran") {
                 openBudgetModal();
               } else if (pathname === "/tabungan") {
@@ -120,9 +122,9 @@ export default function Sidebar() {
           >
             {pathname === "/laporan" ? <FileDown size={18} /> : <PlusCircle size={18} />}
             <span>
-              {pathname === "/anggaran" ? "Tambah Anggaran" : 
-               pathname === "/tabungan" ? "Tambah Tabungan" : 
-               pathname === "/laporan" ? "Download Excel" : "Tambah Transaksi"}
+              {pathname === "/anggaran" ? t("common.add_budget") : 
+               pathname === "/tabungan" ? t("common.add_savings") : 
+               pathname === "/laporan" ? t("common.download_report") : t("common.add_transaction")}
             </span>
           </button>
         </div>

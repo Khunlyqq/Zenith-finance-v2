@@ -69,58 +69,46 @@ export default async function BudgetPage() {
 
   return (
     <div className="space-y-8 md:space-y-12 pb-12">
-      {/* Overview Cards — Premium 2-column Grid on Mobile */}
-      <section className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+      {/* Overview Cards — Snap-Scrolling for Mobile */}
+      <section className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0">
         <div 
-          className="col-span-2 lg:col-span-1 bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] shadow-2xl relative overflow-hidden group premium-glow h-[160px] md:h-auto flex flex-col justify-center md:justify-start"
+          className="min-w-[85%] md:min-w-0 snap-center bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden group premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
         >
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-          <p className="text-white font-black text-[9px] md:text-[10px] uppercase tracking-widest mb-1 opacity-80">ANGGARAN {monthName}</p>
-          <div className="mt-1 md:mt-2">
-            <h2 className="text-2xl md:text-4xl font-black text-white leading-none tracking-tighter">
-              Rp {new Intl.NumberFormat('id-ID').format(totalBudget)}
-            </h2>
-            <div className="mt-3 md:mt-4 flex items-center gap-1 text-[8px] md:text-[10px] font-black text-white/70 uppercase tracking-widest bg-white/10 px-2 py-1 rounded w-fit">
-               <TrendingUp size={12} /> TERMANTAU
-            </div>
+          <p className="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-2 opacity-80">ANGGARAN {monthName}</p>
+          <h2 className="text-3xl md:text-4xl font-black text-white leading-none tracking-tighter">
+            Rp {new Intl.NumberFormat('id-ID').format(totalBudget)}
+          </h2>
+          <div className="mt-4 flex items-center gap-2 text-[10px] font-black text-white/70 uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full w-fit border border-white/10">
+             <TrendingUp size={14} /> STATUS: AKTIF
           </div>
         </div>
 
         <div 
-          className="col-span-1 bg-[#181c1d] p-5 md:p-8 rounded-2xl md:rounded-[2.5rem] border border-[#899295]/10 hover:bg-[#1c2021] transition-all premium-glow h-[140px] md:h-auto flex flex-col justify-center md:justify-start"
+          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#78dc77]/40 hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
-          <div className="flex justify-between items-start mb-3 md:mb-6">
-            <div className="p-2 md:p-3 bg-[#78dc77]/10 rounded-xl text-[#78dc77]">
-              <span className="material-symbols-outlined font-icon text-lg md:text-xl">payments</span>
-            </div>
-          </div>
-          <p className="text-[#899295] text-[8px] md:text-xs font-black uppercase tracking-widest mb-1">TERPAKAI</p>
-          <h2 className="text-lg md:text-2xl font-black font-headline text-[#e0e3e4] tracking-tight line-clamp-1">
-            {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(totalSpent)}
+          <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">TERPAKAI SAAT INI</p>
+          <h2 className="text-2xl md:text-3xl font-black font-headline text-[#e0e3e4] tracking-tight line-clamp-1">
+            {new Intl.NumberFormat('id-ID').format(totalSpent)}
           </h2>
-          <p className={`text-[8px] md:text-[10px] mt-1 md:mt-2 font-black tracking-widest uppercase ${totalSpent > totalBudget ? 'text-red-400' : 'text-[#78dc77]/60'}`}>
-            {Math.round((totalSpent / totalBudget) * 100) || 0}% TOTAL
+          <p className={`text-[10px] mt-3 font-black tracking-widest uppercase px-3 py-1 bg-[#78dc77]/10 rounded-full w-fit border border-[#78dc77]/10 ${totalSpent > totalBudget ? 'text-red-400 border-red-400/20 bg-red-400/10' : 'text-[#78dc77]'}`}>
+            {Math.round((totalSpent / totalBudget) * 100) || 0}% ALOKASI
           </p>
         </div>
 
         <div 
-          className="col-span-1 bg-[#181c1d] p-5 md:p-8 rounded-2xl md:rounded-[2.5rem] border border-[#899295]/10 hover:bg-[#1c2021] transition-all premium-glow h-[140px] md:h-auto flex flex-col justify-center md:justify-start"
+          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#ffb870]/40 hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '255, 184, 112' } as React.CSSProperties}
         >
-          <div className="flex justify-between items-start mb-3 md:mb-6">
-            <div className="p-2 md:p-3 bg-[#ffb870]/10 rounded-xl text-[#ffb870]">
-              <span className="material-symbols-outlined font-icon text-lg md:text-xl">account_balance</span>
-            </div>
-          </div>
-          <p className="text-[#899295] text-[8px] md:text-xs font-black uppercase tracking-widest mb-1">SISA</p>
-          <h2 className="text-lg md:text-2xl font-black font-headline text-[#ffb870] tracking-tight line-clamp-1">
-            {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(Math.max(0, remainingBudget))}
+          <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">SISA ANGGARAN</p>
+          <h2 className="text-2xl md:text-3xl font-black font-headline text-[#ffb870] tracking-tight line-clamp-1">
+            {new Intl.NumberFormat('id-ID').format(Math.max(0, remainingBudget))}
           </h2>
-          <div className="flex items-center gap-1 text-[#78dc77] text-[8px] md:text-[10px] font-black mt-1 md:mt-2 uppercase tracking-wide">
-             <span className="material-symbols-outlined text-[10px] md:text-xs">check_circle</span>
-             {remainingBudget > 0 ? "AMAN" : "OVER"}
+          <div className="flex items-center gap-2 text-[#78dc77] text-[10px] font-black mt-3 uppercase tracking-widest px-3 py-1 bg-[#ffb870]/10 rounded-full w-fit border border-[#ffb870]/10">
+             <span className="material-symbols-outlined text-sm">check_circle</span>
+             {remainingBudget > 0 ? "STABIL" : "LIMIT"}
           </div>
         </div>
       </section>

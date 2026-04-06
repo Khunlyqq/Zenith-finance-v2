@@ -59,34 +59,43 @@ export default function SavingsClient({
         
         {/* Hero Balance Card */}
         <div 
-          className="lg:col-span-7 bg-gradient-to-br from-[#86d2e5] to-[#006778] p-7 md:p-10 rounded-3xl flex flex-col justify-between min-h-[220px] md:min-h-[300px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse"
+          className="lg:col-span-7 bg-gradient-to-br from-[#86d2e5] to-[#006778] p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] flex flex-col justify-between min-h-[260px] md:min-h-[360px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse"
           style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
         >
-          <div className="absolute -right-10 -top-10 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
+          <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
           <div className="relative z-10">
-            <div className="flex items-center gap-2 text-white mb-3 uppercase tracking-[0.2em] text-[9px] md:text-[10px] font-black opacity-80">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              <span>Total Saldo Tabungan</span>
+            <div className="flex items-center gap-2 mb-4 opacity-70">
+              <span className="material-symbols-outlined text-[14px] text-white">account_balance_wallet</span>
+              <span className="text-[10px] font-black tracking-[0.2em] uppercase text-white">ZENITH SAVINGS ACCOUNT</span>
             </div>
-            <h3 className="text-3xl md:text-5xl lg:text-7xl font-black text-white tracking-tighter -ml-0.5">
-              Rp {new Intl.NumberFormat('id-ID').format(totalSavings)}
-            </h3>
+            <div className="flex items-baseline gap-2 md:gap-3">
+              <span className="text-white/80 text-xl md:text-2xl font-bold">Rp</span>
+              <h3 className="text-4xl md:text-7xl font-black text-white tracking-tighter -ml-1">
+                {new Intl.NumberFormat('id-ID').format(totalSavings)}
+              </h3>
+            </div>
           </div>
-          <div className="relative z-10 flex items-end justify-between mt-6">
-            <div className="flex gap-6 md:gap-12">
+
+          <div className="relative z-10 flex flex-col gap-6 mt-8">
+            <div className="flex items-center gap-6">
               <div>
-                <p className="text-[9px] md:text-[10px] text-white/70 font-black uppercase tracking-widest mb-1 md:mb-2">Terkumpul</p>
-                <p className="text-lg md:text-2xl font-black text-white">
+                <p className="text-[10px] text-white/60 font-black uppercase tracking-[0.2em] mb-1">PROGRES AKUMULATIF</p>
+                <p className="text-xl md:text-3xl font-black text-white">
                   {overallProgress}%{" "}
-                  <span className="text-[10px] md:text-xs font-normal opacity-70 ml-1">
-                    dari Rp {new Intl.NumberFormat('id-ID').format(totalTarget)}
+                  <span className="text-[10px] md:text-sm font-normal opacity-50 ml-2">
+                    LENGKAP
                   </span>
                 </p>
               </div>
+              <div className="h-10 w-px bg-white/10" />
               <div>
-                <p className="text-[9px] md:text-[10px] text-white/70 font-black uppercase tracking-widest mb-1 md:mb-2">Total Goal</p>
-                <p className="text-lg md:text-2xl font-black text-white">{goals.length} Target</p>
+                <p className="text-[10px] text-white/60 font-black uppercase tracking-[0.2em] mb-1">TARGET AKTIF</p>
+                <p className="text-xl md:text-3xl font-black text-white">{goals.length}</p>
               </div>
+            </div>
+            
+            <div className="w-full h-1.5 bg-black/20 rounded-full overflow-hidden">
+               <div className="h-full bg-white/40 rounded-full" style={{ width: `${overallProgress}%` }}></div>
             </div>
           </div>
         </div>

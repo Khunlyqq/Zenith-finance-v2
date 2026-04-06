@@ -33,7 +33,7 @@ export default async function ReportsPage() {
     .order("date", { ascending: true });
 
   const { data: profile } = await supabase.from('profiles').select('is_premium').eq('id', user.id).single();
-  const isPremium = profile?.is_premium || false;
+  const isPremium = true; // Premium for All (v2.3.3)
 
   const monthlyData: Record<string, { income: number; expense: number }> = {};
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
@@ -149,46 +149,53 @@ export default async function ReportsPage() {
         </div>
       </section>
 
-      {/* Metrics Section — 2nd column grid on mobile */}
-      <section className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+      {/* Metrics Section — Snap-Scrolling for Mobile */}
+      <section className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0">
         <div 
-          className="col-span-1 bg-[#181c1d] p-5 md:p-8 rounded-2xl md:rounded-3xl border-l-4 border-[#78dc77]/40 shadow-sm relative overflow-hidden group premium-glow"
+          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#78dc77]/40 shadow-xl relative overflow-hidden group premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
           <div className="relative z-10">
-            <p className="text-[#899295] text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1">INCOME</p>
-            <div className="text-lg md:text-3xl font-black font-headline tracking-tighter line-clamp-1 text-[#e0e3e4]">
-              {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(currentIncome)}
+            <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">TOTAL INCOME</p>
+            <div className="text-2xl md:text-3xl font-black font-headline tracking-tighter line-clamp-1 text-[#e0e3e4]">
+              {new Intl.NumberFormat('id-ID').format(currentIncome)}
             </div>
-            <div className={`mt-2 flex items-center gap-1 text-[7px] md:text-[9px] font-black uppercase px-1.5 py-0.5 rounded w-fit ${incomeChange >= 0 ? 'text-[#78dc77] bg-[#78dc77]/10' : 'text-[#ffb4ab] bg-[#ffb4ab]/10'}`}>
+            <div className={`mt-3 flex items-center gap-1.5 text-[9px] font-black uppercase px-3 py-1 rounded-full w-fit border ${incomeChange >= 0 ? 'text-[#78dc77] bg-[#78dc77]/10 border-[#78dc77]/10' : 'text-[#ffb4ab] bg-[#ffb4ab]/10 border-[#ffb4ab]/10'}`}>
               {Math.abs(incomeChange)}% VS LALU
             </div>
           </div>
         </div>
+
         <div 
-          className="col-span-1 bg-[#181c1d] p-5 md:p-8 rounded-2xl md:rounded-3xl border-l-4 border-[#ffb870]/40 shadow-sm relative overflow-hidden group premium-glow"
+          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#ffb870]/40 shadow-xl relative overflow-hidden group premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '255, 184, 112' } as React.CSSProperties}
         >
            <div className="relative z-10">
-              <p className="text-[#899295] text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1">EXPENSE</p>
-              <div className="text-lg md:text-3xl font-black font-headline tracking-tighter line-clamp-1 text-[#ffb870]">
-                {new Intl.NumberFormat('id-ID', { notation: 'compact' }).format(currentExpense)}
+              <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">TOTAL EXPENSE</p>
+              <div className="text-2xl md:text-3xl font-black font-headline tracking-tighter line-clamp-1 text-[#ffb870]">
+                {new Intl.NumberFormat('id-ID').format(currentExpense)}
               </div>
-              <div className={`mt-2 flex items-center gap-1 text-[7px] md:text-[9px] font-black uppercase px-1.5 py-0.5 rounded w-fit ${expenseChange <= 0 ? 'text-[#78dc77] bg-[#78dc77]/10' : 'text-[#ffb4ab] bg-[#ffb4ab]/10'}`}>
+              <div className={`mt-3 flex items-center gap-1.5 text-[9px] font-black uppercase px-3 py-1 rounded-full w-fit border ${expenseChange <= 0 ? 'text-[#78dc77] bg-[#78dc77]/10 border-[#78dc77]/10' : 'text-[#ffb4ab] bg-[#ffb4ab]/10 border-[#ffb4ab]/10'}`}>
                  {Math.abs(expenseChange)}% VS LALU
               </div>
            </div>
         </div>
+
         <div 
-          className="col-span-2 md:col-span-1 bg-gradient-to-br from-[#86d2e5] to-[#006778] p-5 md:p-8 rounded-2xl md:rounded-3xl shadow-xl relative overflow-hidden group premium-glow"
+          className="min-w-[85%] md:min-w-0 snap-center bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden group premium-glow flex flex-col justify-between"
           style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
         >
-           <div className="relative z-10">
-              <p className="text-white font-black text-[8px] md:text-[10px] uppercase tracking-widest mb-1 opacity-80">NET SAVINGS</p>
-              <div className="text-xl md:text-3xl font-black font-headline text-white tracking-tighter">
+           <div className="relative z-10 text-white">
+              <p className="text-white/70 font-black text-[10px] uppercase tracking-[0.2em] mb-2">NET SAVINGS</p>
+              <div className="text-2xl md:text-4xl font-black font-headline tracking-tighter leading-none mb-4">
                 Rp {new Intl.NumberFormat('id-ID').format(netSavings)}
               </div>
-              <p className="mt-2 text-[8px] md:text-[10px] font-black text-white/70 uppercase tracking-widest">RASIO: {savingsRatio}%</p>
+              <div className="flex items-center gap-3">
+                 <div className="flex-1 h-1.5 bg-black/20 rounded-full overflow-hidden">
+                    <div className="h-full bg-white/40 rounded-full" style={{ width: `${savingsRatio}%` }}></div>
+                 </div>
+                 <span className="text-[10px] font-black uppercase tracking-widest">{savingsRatio}%</span>
+              </div>
            </div>
         </div>
       </section>

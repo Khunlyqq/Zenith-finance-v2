@@ -43,6 +43,7 @@ import { Toaster } from "sonner";
 import { ModalProvider } from "@/components/providers/ModalProvider";
 import { SettingsEnforcer } from "@/components/providers/SettingsEnforcer";
 import { OfflineSyncManager } from "@/components/providers/OfflineSyncManager";
+import { LanguageProvider } from "@/components/providers/LanguageProvider"; // [NEW]
 import { createClient } from "@/lib/supabase/server";
 
 export default async function RootLayout({
@@ -54,10 +55,11 @@ export default async function RootLayout({
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const userPreferences = user?.user_metadata?.preferences || {};
+  const initialLang = userPreferences.lang || "id"; // Default to Indonesian
 
   return (
     <html
-      lang="id"
+      lang={initialLang}
       className={cn("dark", plusJakartaSans.variable, inter.variable, "font-sans", geist.variable)}
     >
       <head>
@@ -69,10 +71,12 @@ export default async function RootLayout({
       <body className="antialiased bg-[#101415] text-[#e0e3e4]">
         <SettingsEnforcer userPreferences={userPreferences} />
         <OfflineSyncManager />
-        <ModalProvider>
-          {children}
-          <Toaster richColors position="top-center" />
-        </ModalProvider>
+        <LanguageProvider initialLang={initialLang}>
+          <ModalProvider>
+            {children}
+            <Toaster richColors position="top-center" />
+          </ModalProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
