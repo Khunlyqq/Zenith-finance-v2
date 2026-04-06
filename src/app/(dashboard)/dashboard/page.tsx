@@ -17,6 +17,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import EmptyState from "@/components/shared/EmptyState";
 import { getServerTranslation } from "@/lib/i18n/server";
+import WalletCard from "@/components/dashboard/WalletCard";
 
 
 // Fast Section: Hero Stats & Budget
@@ -68,56 +69,12 @@ async function HeroStats() {
 
   return (
     <section className="flex flex-col gap-8">
-      {/* 💳 Digital Wallet Hero Card */}
-      <div 
-        className="bg-gradient-to-br from-[#86d2e5] to-[#006778] rounded-[2.5rem] md:rounded-[3.5rem] p-8 md:p-12 flex flex-col justify-between min-h-[260px] md:min-h-[360px] shadow-2xl relative overflow-hidden group premium-glow glow-pulse"
-        style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
-      >
-        <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-4 opacity-70">
-            <span className="material-symbols-outlined text-[14px]">account_balance_wallet</span>
-            <span className="text-[10px] font-black tracking-[0.2em] uppercase">{t("dashboard.wallet_title")}</span>
-          </div>
-          <div className="flex items-baseline gap-2 md:gap-3">
-            <span className="text-white/80 text-xl md:text-2xl font-bold">Rp</span>
-            <h3 className="text-white text-4xl md:text-7xl font-black tracking-tighter -ml-1">
-              {new Intl.NumberFormat(locale).format(totalBalance)}
-            </h3>
-          </div>
-        </div>
-
-        <div className="relative z-10 flex flex-col gap-6 mt-8 md:mt-12">
-           {/* Quick Action Grid (Mobile Only/Primary) */}
-           <div className="grid grid-cols-3 gap-3 md:hidden">
-              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl py-3 flex flex-col items-center gap-1 transition-all active:scale-95 border border-white/10">
-                <span className="material-symbols-outlined text-[20px]">qr_code_scanner</span>
-                <span className="text-[8px] font-black uppercase tracking-widest">{lang === "id" ? "Pindai" : "Scan"}</span>
-              </button>
-              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl py-3 flex flex-col items-center gap-1 transition-all active:scale-95 border border-white/10">
-                <span className="material-symbols-outlined text-[20px]">add_circle</span>
-                <span className="text-[8px] font-black uppercase tracking-widest">Top Up</span>
-              </button>
-              <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl py-3 flex flex-col items-center gap-1 transition-all active:scale-95 border border-white/10">
-                <span className="material-symbols-outlined text-[20px]">send_money</span>
-                <span className="text-[8px] font-black uppercase tracking-widest">{lang === "id" ? "Kirim" : "Send"}</span>
-              </button>
-           </div>
-
-           <div className="flex justify-between items-end">
-              <div className="flex flex-col">
-                <span className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-widest mb-1">{lang === "id" ? "DOMPET TERSINKRON" : "SYNCED WALLETS"}</span>
-                <h4 className="text-white font-headline text-lg font-black">{wallets?.length || 0} {lang === "id" ? "Akun Aktif" : "Active Accounts"}</h4>
-              </div>
-              <div className="hidden md:flex">
-                <span className="bg-[#78dc77]/20 text-[#78dc77] px-4 py-2 rounded-full text-[10px] font-black flex items-center gap-2 border border-[#78dc77]/20 backdrop-blur-md uppercase tracking-wider">
-                  <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span> 
-                  {lang === "id" ? "PROTEKSI AKTIF" : "PROTECTION ACTIVE"}
-                </span>
-              </div>
-           </div>
-        </div>
-      </div>
+      <WalletCard 
+        initialBalance={totalBalance}
+        wallets={wallets}
+        lang={lang}
+        t={t}
+      />
 
       {/* 📊 Horizontal Snap Stats — Mobile-First */}
       <div className="flex md:grid md:grid-cols-2 lg:grid-cols-2 gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0">

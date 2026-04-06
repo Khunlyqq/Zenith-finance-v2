@@ -75,14 +75,26 @@ export default function TransactionModal() {
       return;
     }
     setFetchingScan(true);
-    // Simulate AI parsing a receipt
+    
+    // Multi-stage AI Simulation for better "Integration" feel
+    toast.info("Mengakses Kamera & Membaca Struk...", { duration: 1500 });
+    
     setTimeout(() => {
-      setValue("amount", 85000);
-      setValue("note", "Makan Malam (Struk Terscan)");
-      setValue("type", "expense");
-      toast.success("Struk berhasil dipindai dan dikategorikan oleh AI!", { icon: <Sparkles size={16} className="text-[#ffb870]"/> });
-      setFetchingScan(false);
-    }, 2000);
+      toast.info("AI Sedang Mengekstraksi Data Transaksi...", { duration: 1500 });
+      
+      setTimeout(() => {
+        // Mock AI Data
+        setValue("amount", 125000);
+        setValue("note", "Makan Siang (Extracted by Zenith AI)");
+        setValue("type", "expense");
+        
+        toast.success("Hore! AI Zenith berhasil membaca struk senilai Rp 125.000", { 
+          icon: <Sparkles size={16} className="text-[#ffb870]"/>,
+          duration: 3000
+        });
+        setFetchingScan(false);
+      }, 2000);
+    }, 1500);
   };
 
   const onSubmit: SubmitHandler<TransactionInput> = async (data) => {
