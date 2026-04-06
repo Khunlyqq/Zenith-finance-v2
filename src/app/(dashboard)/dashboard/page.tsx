@@ -122,7 +122,7 @@ async function HeroStats() {
       {/* 📊 Horizontal Snap Stats — Mobile-First */}
       <div className="flex md:grid md:grid-cols-2 lg:grid-cols-2 gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0">
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] rounded-3xl p-6 md:p-8 flex flex-col justify-center border-l-8 border-[#78dc77] shadow-xl hover:bg-[#1c2021] transition-all relative overflow-hidden group premium-glow"
+          className="min-w-full md:min-w-0 snap-center bg-[#181c1d] rounded-3xl p-6 md:p-8 flex flex-col justify-center border-l-8 border-[#78dc77] shadow-xl hover:bg-[#1c2021] transition-all relative overflow-hidden group premium-glow"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
           <div className="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 transition-transform hidden md:block">
@@ -135,7 +135,7 @@ async function HeroStats() {
         </div>
 
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] rounded-3xl p-6 md:p-8 flex flex-col justify-center border-l-8 border-[#ffb4ab] shadow-xl hover:bg-[#1c2021] transition-all relative overflow-hidden group premium-glow"
+          className="min-w-full md:min-w-0 snap-center bg-[#181c1d] rounded-3xl p-6 md:p-8 flex flex-col justify-center border-l-8 border-[#ffb4ab] shadow-xl hover:bg-[#1c2021] transition-all relative overflow-hidden group premium-glow"
           style={{ '--card-glow-rgb': '255, 180, 171' } as React.CSSProperties}
         >
           <div className="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 transition-transform hidden md:block">

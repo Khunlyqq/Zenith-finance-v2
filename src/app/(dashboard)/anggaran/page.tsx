@@ -72,7 +72,7 @@ export default async function BudgetPage() {
       {/* Overview Cards — Snap-Scrolling for Mobile */}
       <section className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0">
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden group premium-glow flex flex-col justify-center"
+          className="min-w-full md:min-w-0 snap-center bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden group premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
         >
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
@@ -86,7 +86,7 @@ export default async function BudgetPage() {
         </div>
 
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#78dc77]/40 hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
+          className="min-w-full md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#78dc77]/40 hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
           <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">TERPAKAI SAAT INI</p>
@@ -99,7 +99,7 @@ export default async function BudgetPage() {
         </div>
 
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#ffb870]/40 hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
+          className="min-w-full md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#ffb870]/40 hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '255, 184, 112' } as React.CSSProperties}
         >
           <p className="text-[#899295] text-[10px] font-black uppercase tracking-[0.2em] mb-2">SISA ANGGARAN</p>

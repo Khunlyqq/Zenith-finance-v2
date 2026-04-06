@@ -55,8 +55,27 @@ export default async function TransactionsPage() {
     <div className="space-y-8 md:space-y-12 pb-12">
       {/* Header Cards — Snap-Scrolling for Mobile */}
       <section className="flex md:grid md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+        {/* Estimated Net Balance (Priority) */}
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl relative overflow-hidden group border-l-8 border-[#78dc77]/40 shadow-xl hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
+          className="min-w-full md:min-w-0 snap-center lg:col-span-4 bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-3xl shadow-2xl border border-white/10 premium-glow flex flex-col justify-between"
+          style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
+        >
+           <div>
+             <p className="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-2 opacity-80">{t("transactions.est_net_balance")}</p>
+             <h3 className="text-3xl md:text-4xl font-black font-headline text-white tracking-tighter leading-none">
+               Rp {new Intl.NumberFormat(locale).format(netBalance)}
+             </h3>
+           </div>
+           <div className="mt-6">
+             <div className="h-2 w-full bg-black/20 rounded-full overflow-hidden shadow-inner">
+                <div className="h-full bg-white/40 w-[100%] rounded-full shadow-[0_0_12px_rgba(255,255,255,0.2)]"></div>
+             </div>
+             <p className="text-[9px] mt-3 text-white/70 font-black uppercase tracking-[0.2em]">{t("transactions.sync_active")}</p>
+           </div>
+        </div>
+
+        <div 
+          className="min-w-full md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl relative overflow-hidden group border-l-8 border-[#78dc77]/40 shadow-xl hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
           <div className="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 transition-transform hidden md:block">
@@ -74,7 +93,7 @@ export default async function TransactionsPage() {
         </div>
 
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl relative overflow-hidden group border-l-8 border-[#ffb4ab]/40 shadow-xl hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
+          className="min-w-full md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl relative overflow-hidden group border-l-8 border-[#ffb4ab]/40 shadow-xl hover:bg-[#1c2021] transition-all premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '255, 180, 171' } as React.CSSProperties}
         >
            <div className="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 transition-transform hidden md:block">
@@ -88,24 +107,6 @@ export default async function TransactionsPage() {
               <div className="mt-4 inline-flex items-center gap-1.5 text-[9px] font-black text-[#ffb4ab] bg-[#ffb4ab]/10 px-3 py-1 rounded-full w-fit uppercase tracking-widest border border-[#ffb4ab]/10">
                  <ArrowDown size={12} /> <span className="hidden sm:inline uppercase">{t("transactions.currently_used_text")}</span>
               </div>
-           </div>
-        </div>
-
-        <div 
-          className="min-w-[85%] md:min-w-0 snap-center lg:col-span-4 bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-3xl shadow-2xl border border-white/10 premium-glow flex flex-col justify-between"
-          style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
-        >
-           <div>
-             <p className="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-2 opacity-80">{t("transactions.est_net_balance")}</p>
-             <h3 className="text-3xl md:text-4xl font-black font-headline text-white tracking-tighter leading-none">
-               Rp {new Intl.NumberFormat(locale).format(netBalance)}
-             </h3>
-           </div>
-           <div className="mt-6">
-             <div className="h-2 w-full bg-black/20 rounded-full overflow-hidden shadow-inner">
-                <div className="h-full bg-white/40 w-[100%] rounded-full shadow-[0_0_12px_rgba(255,255,255,0.2)]"></div>
-             </div>
-             <p className="text-[9px] mt-3 text-white/70 font-black uppercase tracking-[0.2em]">{t("transactions.sync_active")}</p>
            </div>
         </div>
       </section>

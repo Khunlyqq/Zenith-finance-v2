@@ -151,8 +151,27 @@ export default async function ReportsPage() {
 
       {/* Metrics Section — Snap-Scrolling for Mobile */}
       <section className="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+        {/* Net Savings (Priority) */}
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#78dc77]/40 shadow-xl relative overflow-hidden group premium-glow flex flex-col justify-center"
+          className="min-w-full md:min-w-0 snap-center bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden group premium-glow flex flex-col justify-between"
+          style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
+        >
+           <div className="relative z-10 text-white">
+              <p className="text-white/70 font-black text-[10px] uppercase tracking-[0.2em] mb-2">NET SAVINGS</p>
+              <div className="text-2xl md:text-4xl font-black font-headline tracking-tighter leading-none mb-4">
+                Rp {new Intl.NumberFormat('id-ID').format(netSavings)}
+              </div>
+              <div className="flex items-center gap-3">
+                 <div className="flex-1 h-1.5 bg-black/20 rounded-full overflow-hidden">
+                    <div className="h-full bg-white/40 rounded-full" style={{ width: `${savingsRatio}%` }}></div>
+                 </div>
+                 <span className="text-[10px] font-black uppercase tracking-widest">{savingsRatio}%</span>
+              </div>
+           </div>
+        </div>
+
+        <div 
+          className="min-w-full md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#78dc77]/40 shadow-xl relative overflow-hidden group premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '120, 220, 119' } as React.CSSProperties}
         >
           <div className="relative z-10">
@@ -167,7 +186,7 @@ export default async function ReportsPage() {
         </div>
 
         <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#ffb870]/40 shadow-xl relative overflow-hidden group premium-glow flex flex-col justify-center"
+          className="min-w-full md:min-w-0 snap-center bg-[#181c1d] p-6 md:p-8 rounded-3xl border-l-8 border-[#ffb870]/40 shadow-xl relative overflow-hidden group premium-glow flex flex-col justify-center"
           style={{ '--card-glow-rgb': '255, 184, 112' } as React.CSSProperties}
         >
            <div className="relative z-10">
@@ -177,24 +196,6 @@ export default async function ReportsPage() {
               </div>
               <div className={`mt-3 flex items-center gap-1.5 text-[9px] font-black uppercase px-3 py-1 rounded-full w-fit border ${expenseChange <= 0 ? 'text-[#78dc77] bg-[#78dc77]/10 border-[#78dc77]/10' : 'text-[#ffb4ab] bg-[#ffb4ab]/10 border-[#ffb4ab]/10'}`}>
                  {Math.abs(expenseChange)}% VS LALU
-              </div>
-           </div>
-        </div>
-
-        <div 
-          className="min-w-[85%] md:min-w-0 snap-center bg-gradient-to-br from-[#86d2e5] to-[#006778] p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden group premium-glow flex flex-col justify-between"
-          style={{ '--card-glow-rgb': '134, 210, 229' } as React.CSSProperties}
-        >
-           <div className="relative z-10 text-white">
-              <p className="text-white/70 font-black text-[10px] uppercase tracking-[0.2em] mb-2">NET SAVINGS</p>
-              <div className="text-2xl md:text-4xl font-black font-headline tracking-tighter leading-none mb-4">
-                Rp {new Intl.NumberFormat('id-ID').format(netSavings)}
-              </div>
-              <div className="flex items-center gap-3">
-                 <div className="flex-1 h-1.5 bg-black/20 rounded-full overflow-hidden">
-                    <div className="h-full bg-white/40 rounded-full" style={{ width: `${savingsRatio}%` }}></div>
-                 </div>
-                 <span className="text-[10px] font-black uppercase tracking-widest">{savingsRatio}%</span>
               </div>
            </div>
         </div>
