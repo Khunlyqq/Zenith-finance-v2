@@ -16,8 +16,8 @@ import { getCachedUser } from "@/lib/supabase/user";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import EmptyState from "@/components/shared/EmptyState";
-import { getServerTranslation } from "@/lib/i18n/server";
 import WalletCard from "@/components/dashboard/WalletCard";
+import TransactionItem from "@/components/shared/TransactionItem";
 
 
 // Fast Section: Hero Stats & Budget
@@ -159,24 +159,9 @@ async function RecentTransactions() {
         <Link href="/transaksi" className="text-[#86d2e5] text-xs font-bold uppercase tracking-widest hover:underline">{t("dashboard.see_all")}</Link>
       </div>
       
-      <div className="space-y-6 relative z-10">
+      <div className="grid grid-cols-1 gap-4 relative z-10 overflow-y-auto max-h-[480px] scrollbar-hide pr-1">
         {transactions?.map((tx: any) => (
-          <div key={tx.id} className="flex items-center gap-4 hover:bg-[#272b2c] active:bg-[#272b2c] p-3 md:p-2 rounded-2xl transition-all cursor-pointer group">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-[#323537] rounded-xl flex items-center justify-center text-[#ffb870] group-hover:scale-110 group-active:scale-95 transition-transform shrink-0">
-              <span className="material-symbols-outlined text-[18px] md:text-[20px]">{tx.categories?.icon || 'payments'}</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="font-bold text-[#e0e3e4] text-sm md:text-base truncate">{tx.note || tx.categories?.name || (lang === "id" ? 'Transaksi' : 'Transaction')}</h4>
-              <p className="text-[9px] md:text-[10px] text-[#899295] font-black uppercase tracking-widest opacity-60">
-                {new Date(tx.date).toLocaleDateString(locale, { day: 'numeric', month: 'short' })} • {tx.categories?.name || (lang === "id" ? 'Umum' : 'General')}
-              </p>
-            </div>
-            <div className="text-right shrink-0">
-              <p className={`font-black text-sm md:text-base ${tx.type === 'expense' ? 'text-[#ffb4ab]' : 'text-[#78dc77]'}`}>
-                {tx.type === 'expense' ? '-' : '+'} Rp {new Intl.NumberFormat(locale, { notation: 'compact' }).format(Math.abs(tx.amount))}
-              </p>
-            </div>
-          </div>
+          <TransactionItem key={tx.id} tx={tx} lang={lang} view="mobile" />
         ))}
 
         {(!transactions || transactions.length === 0) && (

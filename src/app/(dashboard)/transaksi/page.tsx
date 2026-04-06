@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import EmptyState from "@/components/shared/EmptyState";
 import { getServerTranslation } from "@/lib/i18n/server";
+import TransactionItem from "@/components/shared/TransactionItem";
 
 
 export default async function TransactionsPage() {
@@ -154,48 +155,7 @@ export default async function TransactionsPage() {
             </thead>
             <tbody className="divide-y divide-[#899295]/5">
               {transactions.map((tx: any) => (
-                <tr key={tx.id} className="group hover:bg-[#1c2021] transition-all cursor-pointer">
-                  <td className="px-8 py-6">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-black">
-                        {new Date(tx.date).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </span>
-                      <span className="text-[10px] font-bold text-[#899295] tracking-wider lowercase opacity-60">
-                        {new Date(tx.date).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })} {lang === 'id' ? 'WIB' : ''}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="h-11 w-11 rounded-xl bg-[#86d2e5]/10 flex items-center justify-center text-[#86d2e5] group-hover:scale-110 transition-transform border border-[#86d2e5]/10 shadow-lg shadow-[#86d2e5]/5">
-                        <span className="material-symbols-outlined">{tx.categories?.icon || 'payments'}</span>
-                      </div>
-                      <div>
-                        <p className="text-sm font-black tracking-tight truncate max-w-[240px] text-[#e0e3e4]">{tx.note || tx.categories?.name || (lang === 'id' ? 'Transaksi' : 'Transaction')}</p>
-                        <p className="text-[10px] font-black text-[#899295] uppercase tracking-widest opacity-60">{tx.categories?.name || (lang === 'id' ? 'Umum' : 'General')}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6 text-center">
-                    <span className={`px-4 py-1.5 bg-[#323537] text-[9px] font-black rounded-full uppercase tracking-widest border border-[#899295]/10 ${tx.type === 'income' ? 'text-[#78dc77] border-[#78dc77]/20 shadow-lg shadow-[#78dc77]/5' : 'text-[#ffb4ab] border-[#ffb4ab]/20 shadow-lg shadow-[#ffb4ab]/5'}`}>
-                      {tx.type}
-                    </span>
-                  </td>
-                  <td className="px-8 py-6 text-center">
-                    <span className="text-[10px] font-black text-[#899295] uppercase tracking-widest bg-white/5 px-3 py-1 rounded-lg border border-white/5">{tx.wallets?.name || (lang === 'id' ? 'Utama' : 'Primary')}</span>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <span className={`text-base font-black ${tx.type === 'expense' ? 'text-[#ffb4ab]' : 'text-[#78dc77]'}`}>
-                      {tx.type === 'expense' ? '-' : '+'} Rp {new Intl.NumberFormat(locale).format(Math.abs(tx.amount))}
-                    </span>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100">
-                      <button className="p-2.5 bg-white/5 hover:bg-[#86d2e5] hover:text-[#006778] rounded-xl transition-all border border-white/5"><Edit3 size={16} /></button>
-                      <button className="p-2.5 bg-white/5 hover:bg-red-400/20 hover:text-red-400 rounded-xl transition-all border border-white/5"><Trash2 size={16} /></button>
-                    </div>
-                  </td>
-                </tr>
+                <TransactionItem key={tx.id} tx={tx} lang={lang} view="desktop" />
               ))}
             </tbody>
           </table>
@@ -204,38 +164,7 @@ export default async function TransactionsPage() {
         {/* Mobile Grid View (Cards) — 2 Columns Premium */}
         <div className="lg:hidden grid grid-cols-2 gap-3 p-4 relative z-10">
           {transactions.map((tx: any) => (
-            <div 
-              key={tx.id} 
-              className="bg-[#1c2021] p-4 rounded-2xl border border-white/5 flex flex-col justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="h-9 w-9 rounded-xl bg-[#86d2e5]/10 flex items-center justify-center text-[#86d2e5] border border-[#86d2e5]/10">
-                  <span className="material-symbols-outlined text-[18px]">{tx.categories?.icon || 'payments'}</span>
-                </div>
-                <span className={`text-[8px] font-black px-2 py-0.5 rounded-full border ${tx.type === 'income' ? 'text-[#78dc77] border-[#78dc77]/20 bg-[#78dc77]/5' : 'text-[#ffb4ab] border-[#ffb4ab]/20 bg-[#ffb4ab]/5'}`}>
-                  {tx.type.toUpperCase()}
-                </span>
-              </div>
-              
-              <div className="mb-4">
-                <h4 className="text-[11px] font-black line-clamp-1 text-[#e0e3e4] mb-0.5">{tx.note || tx.categories?.name || (lang === 'id' ? 'Transaksi' : 'Transaction')}</h4>
-                <p className="text-[8px] font-black text-[#899295] uppercase tracking-wider">{new Date(tx.date).toLocaleDateString(locale, { day: 'numeric', month: 'short' })}</p>
-              </div>
-
-              <div className="flex justify-between items-end mt-auto">
-                <p className={`text-sm font-black ${tx.type === 'expense' ? 'text-[#ffb4ab]' : 'text-[#78dc77]'}`}>
-                  {tx.type === 'expense' ? '-' : '+'} 
-                  {Number(tx.amount) >= 1000000 
-                    ? `${(Number(tx.amount) / 1000000).toFixed(1)}jt` 
-                    : new Intl.NumberFormat(locale, { notation: 'compact' }).format(Math.abs(tx.amount))}
-                </p>
-                <div className="flex gap-1">
-                   <div className="w-6 h-6 rounded-lg bg-white/5 flex items-center justify-center opacity-40">
-                      <Trash2 size={10} />
-                   </div>
-                </div>
-              </div>
-            </div>
+            <TransactionItem key={tx.id} tx={tx} lang={lang} view="mobile" />
           ))}
         </div>
 

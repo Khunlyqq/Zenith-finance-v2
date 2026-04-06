@@ -59,8 +59,12 @@ export default function TransactionModal() {
     if (catRes.data) setCategories(catRes.data);
     if (wallRes.data) {
       setWallets(wallRes.data);
-      if (wallRes.data.length > 0) {
+      // Auto-select if only one wallet exists
+      if (wallRes.data.length === 1) {
         setValue("wallet_id", wallRes.data[0].id);
+      } else if (wallRes.data.length > 0) {
+        // Fallback: Optional, can keep as is or leave empty
+        // setValue("wallet_id", wallRes.data[0].id);
       }
     }
     
@@ -91,7 +95,7 @@ export default function TransactionModal() {
       
       // Final Result
       setValue("amount", result.amount);
-      setValue("note", `${result.note} (${file.name})`);
+      setValue("note", result.note);
       setValue("type", "expense");
       
       // Attempt to auto-select category if we have a match
