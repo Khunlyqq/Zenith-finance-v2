@@ -73,7 +73,7 @@ async function HeroStats() {
         initialBalance={totalBalance}
         wallets={wallets}
         lang={lang}
-        t={t}
+        title={t("dashboard.wallet_title")}
       />
 
       {/* 📊 Horizontal Snap Stats — Mobile-First */}

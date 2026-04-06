@@ -8,15 +8,15 @@ interface WalletCardProps {
   initialBalance: number;
   wallets: any[];
   lang: string;
-  t: (key: string) => string;
+  title: string;
 }
 
-export default function WalletCard({ initialBalance, wallets, lang, t }: WalletCardProps) {
+export default function WalletCard({ initialBalance, wallets, lang, title }: WalletCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedWalletId, setSelectedWalletId] = useState<string | "all">("all");
 
   const selectedWallet = selectedWalletId === "all" 
-    ? { name: t("dashboard.wallet_title"), balance: initialBalance }
+    ? { name: title, balance: initialBalance }
     : wallets.find(w => w.id === selectedWalletId);
 
   const locale = lang === "id" ? "id-ID" : "en-US";
@@ -106,7 +106,7 @@ export default function WalletCard({ initialBalance, wallets, lang, t }: WalletC
                         <Wallet size={20} />
                       </div>
                       <div className="text-left">
-                        <p className={`text-sm font-black ${selectedWalletId === "all" ? "text-white" : "text-[#899295]"}`}>{t("dashboard.wallet_title")}</p>
+                        <p className={`text-sm font-black ${selectedWalletId === "all" ? "text-white" : "text-[#899295]"}`}>{title}</p>
                         <p className="text-[10px] text-[#86d2e5] font-black">Rp {new Intl.NumberFormat(locale).format(initialBalance)}</p>
                       </div>
                     </div>
